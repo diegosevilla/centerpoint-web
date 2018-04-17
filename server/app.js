@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 //json parser
 app.use(bodyParser.json())
 // Serve static assets
-app.use(express.static(path.resolve(__dirname, '..', 'build')))
+app.use(express.static(path.resolve(__dirname, '..', 'react-ui/build')))
 // Serve our api
 app.set('trust proxy', 1) // trust first proxy
 
@@ -35,7 +35,9 @@ app.use('/api', require('./api'))
 
 // Always return the main index.html, so react-router render the route in the client
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '..', 'react-ui/build', 'index.html'));
 });
+
+
 
 module.exports = app;

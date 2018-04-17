@@ -3,7 +3,6 @@ const chalk = require('chalk')
 const Sequelize = require('sequelize')
 const pkg = require('../package.json')
 
-const name = process.env.DATABASE_NAME || pkg.name;
 
 const url = process.env.DATABASE_URL || `postgres://diegosevilla:tiger@localhost:5432/cpsa`;
 
