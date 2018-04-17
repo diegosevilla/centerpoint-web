@@ -6,7 +6,7 @@ const pkg = require('../package.json')
 
 const url = process.env.DATABASE_URL || `postgres://diegosevilla:tiger@localhost:5432/cpsa`;
 
-console.log(chalk.yellow(`Opening database connection to ${url}${name}`));
+console.log(chalk.yellow(`Opening database connection to ${url}/cpsa`));
 
 // create the database instance
 const db = module.exports = new Sequelize(url, {
