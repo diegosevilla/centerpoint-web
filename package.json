@@ -1,0 +1,46 @@
+{
+  "name": "SP",
+  "version": "1.0.0",
+  "description": "A Multi-platform System for Developing, Conducting, Analyzing, and Publishing Surveys ",
+  "engines": {
+    "node": "8.9.x"
+  },
+  "scripts": {
+    "start": "concurrently \"cd react-ui/ && npm run start\" \"nodemon server\"",
+    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "react-ui/node_modules"
+  ],
+  "dependencies": {
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
+    "client-sessions": "^0.8.0",
+    "concurrently": "^3.5.1",
+    "connect-redis": "^3.3.3",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
+    "debug": "^3.1.0",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.14.11",
+    "pg": "^7.4.1",
+    "sequelize": "^4.32.2",
+    "sequelize-tokenify": "^0.1.6",
+    "yargs": "^11.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diegosevilla/sp.git"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "create-react-app",
+    "react"
+  ],
+  "license": "MIT",
+  "devDependencies": {}
+}
