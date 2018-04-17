@@ -4,13 +4,8 @@ const morgan = require('morgan');
 const path = require('path');
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
-const session = require('express-session')
-const redis = require('redis')
-const connect = require('connect-redis');
 
 const app = express();
-const client = redis.createClient();
-const redisStore = connect(session);
 
 // Setup logger
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
@@ -24,12 +19,6 @@ app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, '..', 'react-ui/build')))
 // Serve our api
 app.set('trust proxy', 1) // trust first proxy
-
-app.use(session({
-	secret: 'keyboard cat',
-	cookie: {},
-	httpOnly: false
-}));
 
 app.use('/api', require('./api'))
 
