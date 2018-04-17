@@ -6,7 +6,8 @@
     "node": "8.9.x"
   },
   "scripts": {
-    "start": "concurrently \"cd react-ui/ && npm run start\" \"nodemon server\"",
+    "start": "node server",
+    "dev-start": "concurrently \"cd react-ui/ && npm run start\" \"nodemon server\"",
     "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "cacheDirectories": [
