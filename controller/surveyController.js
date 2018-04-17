@@ -28,9 +28,7 @@ module.exports= {
   create: function(req, res, next) {
     Survey.create({surveyName: req.body.surveyName})
     .then((survey) => {
-      req.session.survey = {id: survey.id};
       res.status(200).send(survey);
-      console.log('>>>>>' + JSON.stringify(req.session));
     }).catch((err) => {
       console.log(err);
       res.status(500).send(err);
