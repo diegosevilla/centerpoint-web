@@ -1,4 +1,5 @@
 const db = require('../db') //this is required
+const sequelize = require('sequelize');
 
 const Answer = require('../db/models/answer');
 const Question = require('../db/models/question');
@@ -15,7 +16,11 @@ module.exports= {
   },
 
   findByQuestion: function(req, res, next){
-    Answer.findAll({where: {question_id: req.params.questionId}})
+    Answer.findAll({
+      where: {question_id: req.params.questionId},
+      attributes: [['response','name'], [sequelize.fn('COUNT', sequelize.col('response')), 'value']],
+      group: 'response'
+    })
     .then((answers) => {
         res.status(200).send(answers)
     }).catch((err) => {

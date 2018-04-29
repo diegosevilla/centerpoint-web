@@ -5,7 +5,9 @@ const Question = require('../db/models/question');
 
 module.exports= {
   findAll: function(req, res, next) {
-    Survey.findAll({include: [Question]})
+    Survey.findAll({
+      attributes:{ exclude: ['created_at', 'updated_at'] }
+    })
     .then(result => {
         res.status(200).send(result);
     })
@@ -26,7 +28,8 @@ module.exports= {
   },
 
   findBySurveyID: function(req, res, next){
-    Survey.find({ where: {surveyId:req.params.surveyId}, include: [Question]})
+    console.log(req.params.id);
+    Survey.find({ where: {surveyId:req.params.id}, include: [Question]})
     .then((survey) => {
       if(!survey) res.status(404).send({id:-1});
       else {
