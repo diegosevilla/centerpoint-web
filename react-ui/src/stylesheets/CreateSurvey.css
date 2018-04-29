@@ -33,15 +33,15 @@ body{}
 	position: fixed;
   top: 0;
   width: 100%;
-	height: 25%;
+	height: 33%;
 	z-index: 2;
 }
 
 .questionRow{
 	position: real;
-	height: 75%;
+	height: 67%;
 	width: 100%;
-	padding-top: 200px;
+	padding-top: 270px;
 	z-index: 1;
 }
 

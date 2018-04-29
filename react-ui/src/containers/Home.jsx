@@ -10,13 +10,20 @@ const $ = window.$;
 class Home extends Component{
     createSurveyEvent (e){
         e.preventDefault();
-        let surveyName = $('#surveyName').val();
-        this.props.createSurvey(surveyName).then((res) => {
-          window.location = '/create-survey/' + this.props.survey.id;
+        let newSurvey = {
+          surveyName: $('#surveyName').val(),
+          author: $('#author').val(),
+          details: $('#surveyDetails').val()
+        }
+        this.props.createSurvey(newSurvey).then((res) => {
+          if(this.props.survey.id)
+            window.location = '/create-survey/' + this.props.survey.id;
+          else
+            throw ({message:'Error creating survey'});
         })
         .catch((err) => {
           console.log(JSON.stringify(err));
-          Materialize.toast(JSON.stringify(err), 5000, 'toast-error');
+          Materialize.toast(err.message, 5000, 'red lighten-1');
         })
     }
 
@@ -36,6 +43,8 @@ class Home extends Component{
                     <Modal header='Create New Survey' trigger={<Button className='createSurvey btn-large waves-effect waves-light blue-grey darken-1'>Create Survey</Button>}>
                       <form onSubmit={(e) => this.createSurveyEvent(e) }>
                         <Input id='surveyName' required='true' label='Survey Title'/>
+                        <Input id='author' required='true' label='Author'/>
+                        <Input type='textarea' id='surveyDetails' label='Details (short description of the survey)'/>
                         <Input className='btn blue-grey darken-1' type='submit'/>
                       </form>
                     </Modal>

@@ -27,9 +27,15 @@ export function fetchSurvey(id){
   }
 };
 
-export function createSurvey(surveyName){
+export function createSurvey(newSurvey){
   return (dispatch) => {
-    let formData = 'surveyName='+surveyName;
+    let formData = '';
+
+    for(let key in newSurvey) {
+      formData += key+'='+newSurvey[key]+'&';
+    }
+    formData = formData.slice(0,-1);
+
     return fetch('/api/survey/create', {
       method: 'POST',
       headers: {
@@ -45,10 +51,17 @@ export function createSurvey(surveyName){
   }
 };
 
-export function updateSurvey(survey){
+export function updateSurvey(updatedSurvey){
   return (dispatch) => {
-    let formData = 'surveyName='+survey.surveyName;
-    return fetch('/api/survey/update/'+survey.id, {
+    let formData = '';
+
+    for(let key in updatedSurvey) {
+      formData += key+'='+updatedSurvey[key]+'&';
+    }
+
+    formData = formData.slice(0,-1);
+
+    return fetch('/api/survey/update/'+updatedSurvey.id, {
       method: 'POST',
       headers: {
         "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"

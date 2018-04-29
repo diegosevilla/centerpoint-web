@@ -6,10 +6,12 @@ const db = require('../index.js');
 
 const Survey = db.define('survey', {
     surveyName: Sequelize.TEXT,
+    author: Sequelize.TEXT,
     surveyId: {
       type: Sequelize.TEXT,
       unique: true
-    }
+    },
+    details: Sequelize.TEXT
 });
 
 tokenify.tokenify(Survey, {field: 'surveyId'});

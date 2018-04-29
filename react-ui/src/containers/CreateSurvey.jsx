@@ -1,4 +1,4 @@
-  import React, {Component} from 'react';
+import React, {Component} from 'react';
 import {PropTypes}  from 'prop-types';
 import {Button, Icon, Row, Input, Modal, Col} from 'react-materialize';
 import { connect } from 'react-redux';
@@ -19,7 +19,7 @@ const $ = window.$;
 const Materialize = window.Materialize
 class CreateSurvey extends Component{
   componentWillMount(){
-    let id = window.location.pathname.replace(/\/create-survey\//, ''); 
+    let id = window.location.pathname.replace(/\/create-survey\//, '');
     this.props.fetchSurvey(id)
     .then(()=>{
       if(this.props.survey.id === -1){
@@ -30,6 +30,8 @@ class CreateSurvey extends Component{
 
   componentDidUpdate(){
     $('#surveyName').val(this.props.survey.surveyName);
+    $('#author').val(this.props.survey.author);
+    $('#details').val(this.props.survey.details);
   }
 
   remove(e, input){
@@ -56,14 +58,16 @@ class CreateSurvey extends Component{
   }
 
 
-  editTitle(e){
+  editSurvey(e){
     e.preventDefault();
     let survey = {
       id: this.props.survey.id,
-      surveyName: $('#surveyName').val()
+      surveyName: $('#surveyName').val(),
+      details: $('#details').val(),
+      author: $('#author').val()
     };
     this.props.updateSurvey(survey);
-    $('#editTitle').modal('close');
+    $('#editSurvey').modal('close');
   }
 
   submit(e){
@@ -111,10 +115,14 @@ class CreateSurvey extends Component{
             <Row>
               <div className="survTitle center">
                 <h3> {survey.surveyName} </h3>
+                <h5> By: {survey.author} </h5>
+                <h5> {survey.details} </h5>
               </div>
-              <Modal id='editTitle' header='Edit Survey Title' trigger={<Button className="btnEditTitle blue-grey dark-1"><Icon> edit </Icon> Survey Title </Button>}>
-                <form onSubmit={(e) => this.editTitle(e) }>
-                  <Input id='surveyName' required='true' label='Survey Title' defaultValue={survey.surveyName}/>
+              <Modal id='editSurvey' header='Edit Survey' trigger={<Button className="btnEditTitle blue-grey dark-1"><Icon> edit </Icon> Edit Survey </Button>}>
+                <form onSubmit={(e) => this.editSurvey(e) }>
+                  <Input id='surveyName' required='true' label='Survey Title'/>
+                  <Input id='author' required='true' label='Author'/>
+                  <Input type='textarea' id='details' label='Details (short description of the survey)'/>
                   <Input className='btn blue-grey darken-1' type='submit'/>
                 </form>
               </Modal>

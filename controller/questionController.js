@@ -24,7 +24,9 @@ module.exports= {
       res.status(500).send(err);
     });
   },
+
   create: function(req, res, next) {
+    console.log('>>>>>>>>>>>.' + req.body.id);
     Survey.findOne({where: {id: req.body.id}})
     .then(survey => {
       if(survey){

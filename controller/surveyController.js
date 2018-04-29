@@ -25,8 +25,25 @@ module.exports= {
     });
   },
 
+  findBySurveyID: function(req, res, next){
+    Survey.find({ where: {surveyId:req.params.surveyId}, include: [Question]})
+    .then((survey) => {
+      if(!survey) res.status(404).send({id:-1});
+      else {
+        res.status(200).send(survey)
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+  },
+
   create: function(req, res, next) {
-    Survey.create({surveyName: req.body.surveyName})
+    Survey.create({
+      surveyName: req.body.surveyName,
+      details: req.body.details,
+      author: req.body.author
+    })
     .then((survey) => {
       res.status(200).send(survey);
     }).catch((err) => {
@@ -39,7 +56,11 @@ module.exports= {
     Survey.findOne({where: {id: req.params.id}})
     .then((survey) => {
       if(survey){
-        survey.update({surveyName: req.body.surveyName})
+        survey.update({
+          surveyName: req.body.surveyName,
+          details: req.body.details,
+          author: req.body.author
+        })
         .then((updatedSurvey) => {
           res.status(200).send(survey);
         })
