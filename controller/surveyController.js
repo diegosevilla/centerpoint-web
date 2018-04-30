@@ -56,7 +56,7 @@ module.exports= {
   },
 
   increment: function(req, res, next) {
-      Survey.findOne({where: {id: req.params.id}})
+      Survey.findOne({where: {id: req.params.id}, include: [Question]})
       .then((survey) => {
         if(survey){
           survey.increment('responseCount')
