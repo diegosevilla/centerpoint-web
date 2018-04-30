@@ -34,6 +34,7 @@ module.exports= {
       if(question){
         question.createAnswer({
           response: req.body.response,
+          responseCount: req.body.responseCount
       }).then((answer) => {
         res.status(200).send(answer);
       })

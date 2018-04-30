@@ -55,6 +55,24 @@ module.exports= {
     });
   },
 
+  increment: function(req, res, next) {
+      Survey.findOne({where: {id: req.params.id}})
+      .then((survey) => {
+        if(survey){
+          survey.increment('responseCount')
+          .then((updatedSurvey) => {
+            res.status(200).send(survey);
+          })
+        } else {
+          res.status(404).send();
+        }
+      })
+      .catch((err)=> {
+        console.log(err);
+        res.status(500).send(err);
+      });
+  },
+
   update: function(req, res, next){
     Survey.findOne({where: {id: req.params.id}})
     .then((survey) => {

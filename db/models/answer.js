@@ -7,6 +7,9 @@ const Answer = db.define('answer', {
   response: {
     type: Sequelize.DataTypes.TEXT,
     allowNull: false
+  },
+  responseCount: {
+    type: Sequelize.DataTypes.INTEGER
   }
 });
 

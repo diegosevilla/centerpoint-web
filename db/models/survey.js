@@ -11,7 +11,11 @@ const Survey = db.define('survey', {
       type: Sequelize.TEXT,
       unique: true
     },
-    details: Sequelize.TEXT
+    details: Sequelize.TEXT,
+    responseCount: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0
+    }
 });
 
 tokenify.tokenify(Survey, {field: 'surveyId'});
