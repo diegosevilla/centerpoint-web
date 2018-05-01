@@ -25,6 +25,7 @@
     "debug": "^3.1.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "lodash": "^4.17.10",
     "morgan": "^1.9.0",
     "nodemon": "^1.14.11",
     "pg": "^7.4.1",
@@ -33,6 +34,7 @@
     "recharts": "^1.0.0-beta.10",
     "sequelize": "^4.32.2",
     "sequelize-tokenify": "^0.1.6",
+    "victory": "^0.26.0",
     "yargs": "^11.0.0"
   },
   "repository": {

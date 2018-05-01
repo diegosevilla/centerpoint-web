@@ -35,7 +35,8 @@ module.exports= {
     Answer.findAll({
       where: {question_id: req.params.questionId},
       attributes: [['response','name'], [sequelize.fn('COUNT', sequelize.col('response')), 'count']],
-      group: 'response'
+      group: 'response',
+      order: [['response', 'DESC']]
     })
     .then((answers) => {
       res.status(200).send(answers)

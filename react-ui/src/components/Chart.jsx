@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Input, Col} from 'react-materialize';
 import {PieChart, BarChart} from 'react-easy-chart';
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryPie } from 'victory';
+import _ from 'lodash';
 
 class Chart extends React.Component {
   constructor(props) {
@@ -24,22 +26,27 @@ class Chart extends React.Component {
     const {question} = this.props;
     const {answers} = this.state;
     const chart = [];
+    const labels = [];
+
+    answers.forEach((answer) => {
+      labels.push(answer.name);
+      answer.value = parseInt(answer.count);
+    });
 
     switch (question.questionType) {
       case 'Options':
-        answers.forEach((answer) => {
-          answer.key = answer.name;
-          answer.value = parseInt(answer.count);
-        });
-
-        chart.push(<PieChart data={answers} labels/>)
+        chart.push(
+          <VictoryPie colorScale={["tomato", "orange", "gold", "cyan", "navy" ]} height={250} data={answers} x="name" y="count"/>
+        );
         break;
       default:
-        answers.forEach((answer) => {
-          answer.x = answer.name;
-          answer.y = answer.count;
-        });
-        chart.push(<BarChart grid axes colorBars height={400} width={350} data={answers} labels/>)
+        chart.push(
+          <VictoryChart height={250} domainPadding={60}>
+            <VictoryAxis tickFormat={ answers.map((a) => a.name)}/>
+            <VictoryAxis dependentAxis tickFormat={[1,2,3,4]}/>
+            <VictoryBar data={answers} x="name" y="count"/>
+          </VictoryChart>
+        );
     }
 
     return(
