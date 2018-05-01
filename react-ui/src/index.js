@@ -15,10 +15,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <Switch>
-        <Route exact path="/" component={Containers.Home} />
-        <Route exact path="/create-survey/:id" component={Containers.CreateSurvey} />
-        <Route exact path="/view-result" component={Containers.ViewResult} />
-        <Route exact path="*" component={Containers.NotFound} />
+        <Route exact path='/' component={Containers.Home} />
+        <Route exact path='/create-survey/:id' component={Containers.CreateSurvey} />
+        <Route exact path='/view-result/:id' component={Containers.ViewResult} />
+        <Route exact path='*' component={Containers.NotFound} />
       </Switch>
     </Router>
   </Provider>,

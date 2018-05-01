@@ -6,7 +6,10 @@ const Question = require('../db/models/question');
 
 module.exports= {
   findAll: function(res, res, next){
-    Answer.findAll()
+    Answer.findAll({
+      attributes:{ exclude: ['created_at', 'updated_at'] },
+      order: [['question_id', 'ASC'], ['responseCount', 'ASC']]
+    })
     .then( answers => {
       res.status(200).send(answers);
     })
@@ -18,11 +21,24 @@ module.exports= {
   findByQuestion: function(req, res, next){
     Answer.findAll({
       where: {question_id: req.params.questionId},
-      attributes: [['response','name'], [sequelize.fn('COUNT', sequelize.col('response')), 'value']],
-      group: 'response'
+      attributes:{ exclude: ['created_at', 'updated_at'] },
+      order: [['responseCount', 'ASC']]
     })
     .then((answers) => {
         res.status(200).send(answers)
+    }).catch((err) => {
+      res.status(500).send(err);
+    })
+  },
+
+  findByQuestionWithCount: function(req, res, next){
+    Answer.findAll({
+      where: {question_id: req.params.questionId},
+      attributes: [['response','name'], [sequelize.fn('COUNT', sequelize.col('response')), 'count']],
+      group: 'response'
+    })
+    .then((answers) => {
+      res.status(200).send(answers)
     }).catch((err) => {
       res.status(500).send(err);
     })
