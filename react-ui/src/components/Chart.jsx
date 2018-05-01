@@ -29,7 +29,7 @@ class Chart extends React.Component {
       case 'Options':
         answers.forEach((answer) => {
           answer.key = answer.name;
-          answer.value = answer.count;
+          answer.value = parseInt(answer.count);
         });
 
         chart.push(<PieChart data={answers} labels/>)
