@@ -44,7 +44,7 @@ class Chart extends React.Component {
 
     return(
       <div style={{backgroundColor: 'white'}}>
-        <h3> {question.label} </h3>
+        <h5> {question.label} </h5>
         {chart}
       </div>
     )
