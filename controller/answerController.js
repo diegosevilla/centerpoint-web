@@ -36,7 +36,7 @@ module.exports= {
       where: {question_id: req.params.questionId},
       attributes: [['response','name'], [sequelize.fn('COUNT', sequelize.col('response')), 'count']],
       group: 'response',
-      order: [['response', 'DESC']]
+      order: [['count', 'ASC'], ['response', 'ASC']]
     })
     .then((answers) => {
       res.status(200).send(answers)

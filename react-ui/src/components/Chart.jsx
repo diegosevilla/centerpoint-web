@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Input, Col} from 'react-materialize';
 import {PieChart, BarChart} from 'react-easy-chart';
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryPie } from 'victory';
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryPie, VictoryTheme } from 'victory';
 import _ from 'lodash';
 
 class Chart extends React.Component {
@@ -36,15 +36,13 @@ class Chart extends React.Component {
     switch (question.questionType) {
       case 'Options':
         chart.push(
-          <VictoryPie colorScale={["tomato", "orange", "gold", "cyan", "navy" ]} height={250} data={answers} x="name" y="count"/>
+          <VictoryPie padAngle={2} labelRadius={10} labels={(d) => d.name + ' (' + d.count + ') '} colorScale={["tomato", "orange", "gold", "cyan", "navy" ]} height={250} data={answers} x="name" y="count"/>
         );
         break;
       default:
         chart.push(
-          <VictoryChart height={250} domainPadding={60}>
-            <VictoryAxis tickFormat={ answers.map((a) => a.name)}/>
-            <VictoryAxis dependentAxis tickFormat={[1,2,3,4]}/>
-            <VictoryBar data={answers} x="name" y="count"/>
+          <VictoryChart domainPadding={30} height={220}>
+            <VictoryBar style={{ data: { fill: "#c43a31" } }} data={answers} x='name' y='count'/>
           </VictoryChart>
         );
     }
