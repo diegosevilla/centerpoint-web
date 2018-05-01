@@ -52,7 +52,7 @@ class ViewResult extends Component{
             <Row>
               <div className="survTitle center">
                 <h3> {survey.surveyName} </h3>
-                <h5> By: {survey.author} </h5>
+                <h5> {'By: ' + survey.author} </h5>
                 <h5> {survey.details} </h5>
               </div>
             </Row>
