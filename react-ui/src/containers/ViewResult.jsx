@@ -21,10 +21,12 @@ class ViewResult extends Component{
     this.props.fetchSurvey(id)
     .then(()=>{
       if(this.props.survey.id === -1){
+        alert('Invalid Survey!');
         window.location = '/';
       } else {
         this.setState({isLoading: false});
       }
+
     })
   }
 
@@ -56,10 +58,9 @@ class ViewResult extends Component{
 
     if(this.state.isLoading)
       return(
-        <Row className="center">
-          <Col s={4}>
+        <Row style={{width:'100%', marginTop: '25%'}} className="center">
             <Preloader size='big'/>
-          </Col>
+            <h1> Fetching Survey </h1>
         </Row>
       )
     else
@@ -67,13 +68,15 @@ class ViewResult extends Component{
       <div className='bgCS'>
         <div>
           <div className="resultHeader center ">
-            <Row>
-              <div className="survTitle center">
+              <div className="home center">
+                <Button floating large className='teal darken-2' waves='light' icon='home' onClick={(e) => {e.preventDefault() ; window.location = '/'}}/>
+              </div>
+              <br/>
+              <div className="resultTitle center">
                 <h3> {survey.surveyName} </h3>
                 <h5> {'By: ' + survey.author} </h5>
                 <h5> {survey.details} </h5>
               </div>
-            </Row>
           </div>
          <Row className="resultBody">
             {inputs}

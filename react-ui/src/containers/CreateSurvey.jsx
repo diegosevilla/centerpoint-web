@@ -29,6 +29,7 @@ class CreateSurvey extends Component{
     this.props.fetchSurvey(id)
     .then(()=>{
       if(this.props.survey.id === -1){
+        alert("Error creating survey!");
         window.location = '/';
       } else {
         this.setState({isLoading: false})
@@ -114,10 +115,9 @@ class CreateSurvey extends Component{
 
     if(this.state.isLoading)
       return(
-        <Row className="center">
-          <Col s={4}>
+        <Row style={{width:'100%', marginTop: '25%'}} className="center">
             <Preloader size='big'/>
-          </Col>
+            <h1> Creating Survey </h1>
         </Row>
       )
     else
