@@ -27,6 +27,7 @@
     "express-session": "^1.15.6",
     "lodash": "^4.17.10",
     "morgan": "^1.9.0",
+    "nivo": "^0.31.0",
     "nodemon": "^1.14.11",
     "pg": "^7.4.1",
     "react-d3-basic": "^1.6.11",
