@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Input, Col} from 'react-materialize';
+import {Collection, CollectionItem} from 'react-materialize';
 import { ResponsivePie, ResponsiveBar } from 'nivo';
 
 import _ from 'lodash';
+
+
+import styles from '../stylesheets/CreateSurvey.css';
 
 class Chart extends React.Component {
   constructor(props) {
@@ -31,11 +34,25 @@ class Chart extends React.Component {
 
   render(){
     const {question} = this.props;
-    let data = this.state.data;
+    let {answers, data} = this.state;
     const chart = [];
 
-    data = _.sortBy(data,[function(d) { return d.name; }])
+    data = _.sortBy(data,[function(d) { return d.name; }]);
+    answers = _.sortBy(answers, [function(d) { return d.r}])
     switch (question.questionType) {
+      case 'Text':
+        chart.push(
+          <Collection header={question.label}>
+            <div className='innerbox'>
+              {
+                answers.map((answer)=>{
+                  return <CollectionItem style={{borderStyle: 'line'}}> {answer.response} </CollectionItem>
+                })
+              }
+            </div>
+          </Collection>
+        )
+        break;
       case 'Options':
         chart.push(
           <ResponsivePie data={data}
@@ -49,8 +66,8 @@ class Chart extends React.Component {
             }}
             padAngle={3}
             cornerRadius={0}
-            colors='d320c'
             colorBy='id'
+            colors='d320c'
             borderWidth={4}
             borderColor='inherit:darker(0.6)'
             radialLabelsSkipAngle={10}
@@ -66,57 +83,69 @@ class Chart extends React.Component {
             animate={true}
             motionStiffness={90}
             motionDamping={15}
+            legends={[
+            {
+                "position": "top",
+                "direction": "row",
+                "translateY": 0,
+                "itemWidth": 100,
+                "itemHeight": 14,
+                "symbolSize": 14,
+                "symbolShape": "circle"
+            }
+        ]}
           />
         );
         break;
       default:
         chart.push(
           <ResponsiveBar data={data} keys={['value']}
-          margin={{
-            "top": 50,
-            "right": 130,
-            "bottom": 50,
-            "left": 60
-          }}
-          padding={0.45}
-          colorBy="id"
-          borderColor="inherit:darker(1.6)"
-          borderWidth={2}
-          axisBottom={{
-              "orient": "bottom",
-              "tickSize": 5,
-              "tickPadding": 5,
-              "tickRotation": 0,
-              "legend": "OPTIONS",
-              "legendPosition": "center",
-              "legendOffset": 36
-          }}
-          axisLeft={{
-              "orient": "left",
-              "tickSize": 5,
-              "tickPadding": 5,
-              "tickRotation": 0,
-              "legend": "FREQUENCY",
-              "legendPosition": "center",
-              "legendOffset": -40
-          }}
-          labelSkipWidth={12}
-          labelSkipHeight={12}
-          labelTextColor="inherit:darker(1.6)"
-          animate={true}
-          motionStiffness={90}
-          motionDamping={15}
-          legends={[
-              {
-                  "dataFrom": "keys",
-                  "anchor": "bottom-right",
-                  "direction": "column",
-                  "translateX": 120,
-                  "itemWidth": 100,
-                  "itemHeight": 20,
-                  "itemsSpacing": 2,
-                  "symbolSize": 20
-              }
+            margin={{
+              "top": 50,
+              "right": 130,
+              "bottom": 50,
+              "left": 60
+            }}
+            padding={0.45}
+            colors='set3'
+            colorBy='id'
+            borderColor="inherit:darker(1.6)"
+            borderWidth={2}
+            axisBottom={{
+                "orient": "bottom",
+                "tickSize": 5,
+                "tickPadding": 5,
+                "tickRotation": 0,
+                "legend": question.label,
+                "legendPosition": "center",
+                "legendOffset": 36
+            }}
+            axisLeft={{
+                "orient": "left",
+                "tickSize": 5,
+                "tickPadding": 5,
+                "tickRotation": 0,
+                "legend": "FREQUENCY",
+                "legendPosition": "center",
+                "legendOffset": -40
+            }}
+            labelSkipWidth={12}
+            labelSkipHeight={12}
+            labelTextColor="inherit:darker(1.6)"
+            animate={true}
+            motionStiffness={90}
+            motionDamping={15}
+            legends={[
+                {
+                    "dataFrom": "keys",
+                    "anchor": "bottom-right",
+                    "direction": "column",
+                    "translateX": 120,
+                    "itemWidth": 100,
+                    "itemHeight": 20,
+                    "itemsSpacing": 2,
+                    "symbolSize": 20
+                }
           ]}/>
         );
     }
@@ -124,7 +153,6 @@ class Chart extends React.Component {
     return(
       <div style={{backgroundColor: 'white', height: 450, padding: 10}}>
         {chart}
-        <h4> {question.label} </h4>
       </div>
     )
   }

@@ -22,6 +22,10 @@ body{}
 	background-color: orange;
 }
 
+.innerbox{
+	 height: 300px; /* Fix a height here */
+   overflow: auto; /* Optionally you can also use overflow: scroll; */
+}
 .essentials{
 	background-image: url("./../images/banner.jpeg");
 	background-size: contain;

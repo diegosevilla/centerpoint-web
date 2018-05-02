@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {PropTypes}  from 'prop-types';
-import {Button, Icon, Row, Input, Modal, Col} from 'react-materialize';
+import {Button, Icon, Row, Input, Modal, Col, Preloader} from 'react-materialize';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -18,13 +18,21 @@ import styles from './../stylesheets/CreateSurvey.css';
 const $ = window.$;
 const Materialize = window.Materialize
 class CreateSurvey extends Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true
+    };
+  }
   componentWillMount(){
     let id = window.location.pathname.replace(/\/create-survey\//, '');
     this.props.fetchSurvey(id)
     .then(()=>{
       if(this.props.survey.id === -1){
         window.location = '/';
-      };
+      } else {
+        this.setState({isLoading: false})
+      }
     })
   }
 
@@ -104,6 +112,15 @@ class CreateSurvey extends Component{
       );
     });
 
+    if(this.state.isLoading)
+      return(
+        <Row className="center">
+          <Col s={4}>
+            <Preloader size='big'/>
+          </Col>
+        </Row>
+      )
+    else
     return(
       <div className='bgCS'>
         <div>
