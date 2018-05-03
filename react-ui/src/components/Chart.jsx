@@ -92,6 +92,7 @@ class Chart extends React.Component {
               motionDamping={15}
             />
           );
+          break;
       case 'Number':
         let array = _.map(answers, function(a) {return a.response});
         let stat = [];
