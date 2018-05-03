@@ -40,7 +40,7 @@ class ViewResult extends Component{
 
      sortedQuestions.forEach((q) => {
        inputs.push(
-         <div key={q.id} style={{
+         <div style={{
             padding: '10px',
             width: '50%',
             marginLeft: '25%',
@@ -51,7 +51,7 @@ class ViewResult extends Component{
             backgroundColor: '#fcc2a1',
             textAlign: 'center'
          }} >
-          <Chart question={q}/>
+          <Chart key={q.id} question={q}/>
          </div>
        )
      })
@@ -60,7 +60,7 @@ class ViewResult extends Component{
       return(
         <Row style={{width:'100%', marginTop: '25%'}} className="center">
             <Preloader size='big'/>
-            <h1> Fetching Survey </h1>
+            <h1> Fetching Results </h1>
         </Row>
       )
     else
@@ -84,7 +84,6 @@ class ViewResult extends Component{
         </div>
       </div>
     )
-
   }
 }
 
