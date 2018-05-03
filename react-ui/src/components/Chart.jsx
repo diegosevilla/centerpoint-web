@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Collection, CollectionItem, Modal, Row, Button} from 'react-materialize';
-import {VictoryChart, VictoryBoxPlot, VictoryTheme} from 'victory';
+import {VictoryChart, VictoryScatter, VictoryTheme, VictoryLabel} from 'victory';
 import { ResponsivePie, ResponsiveBar } from 'nivo';
 import _ from 'lodash';
 import Math from 'mathjs'
@@ -54,7 +54,7 @@ class Chart extends React.Component {
           </Collection>
         )
         break;
-        case 'CheckBox':
+        case 'Checkbox':
           chart.push(
             <ResponsiveBar data={data} keys={['value']}
               margin={{
@@ -109,12 +109,16 @@ class Chart extends React.Component {
         let array = _.map(answers, function(a) {return a.response});
         if(array.length > 0){
           chart.push(
-            <VictoryChart domainPadding={20}>
-              <VictoryBoxPlot
-                boxWidth={20}
-                medianLabels={["Median"]}
-                theme={VictoryTheme.material}
-                data={[{x: question.label, y:array}]}
+            <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+              <VictoryScatter
+
+                size={10}
+                style={{ labels: { fill: "white", fontSize: 12} }}
+                data={data}
+                x='key'
+                y='value'
+                labels={(datum) => `${datum.y}`}
+                labelComponent={<VictoryLabel dy={14}/>}
               />
             </VictoryChart>
           )
