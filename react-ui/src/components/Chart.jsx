@@ -96,10 +96,11 @@ class Chart extends React.Component {
         let array = _.map(answers, function(a) {return a.response});
         let stat = [];
         if(array.length > 0){
-          let mode = Math.mode(array);
-          if(Array.isArray(mode)) mode=_.max(mode);
+          let tempMode = Math.mode(array);
+          let mode = (Array.isArray(tempMode))? _.max(tempMode) : tempMode;
+          alert(mode);
           stat.push({id:'Min', x:'Min ('+_.min(array)+')', y:0})
-          stat.push({id:'Mode', x:'Mode', y:parseInt(mode)})
+          stat.push({id:'Mode', x:'Mode', y:mode})
           stat.push({id:'Mean', x:'Mean', y:Math.mean(array)})
           stat.push({id:'Median', x:'Median', y:Math.median(array)})
           stat.push({id:'Max', x:'Max ('+_.max(array)+')', y:0})
