@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Collection, CollectionItem, Modal, Row, Button} from 'react-materialize';
-import {VictoryChart, VictoryScatter, VictoryTheme, VictoryLabel} from 'victory';
+import {VictoryChart, VictoryBoxPlot, VictoryTheme} from 'victory';
 import { ResponsivePie, ResponsiveBar } from 'nivo';
 import _ from 'lodash';
 import Math from 'mathjs'
@@ -108,19 +108,58 @@ class Chart extends React.Component {
       case 'Number':
         let array = _.map(answers, function(a) {return a.response});
         if(array.length > 0){
+          data.push({id:'Mean', key:'Mean', value:Math.mean(array)})
+          data.push({id:'Median', key:'Median', value:Math.median(array)})
+          data.push({id:'Mode', key:'Mode', value:Math.mode(array)[0]})
           chart.push(
-            <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
-              <VictoryScatter
-
-                size={10}
-                style={{ labels: { fill: "white", fontSize: 12} }}
-                data={data}
-                x='key'
-                y='value'
-                labels={(datum) => `${datum.y}`}
-                labelComponent={<VictoryLabel dy={14}/>}
-              />
-            </VictoryChart>
+            <ResponsiveBar data={data} keys={['value']}
+              margin={{
+                "top": 50,
+                "right": 130,
+                "bottom": 50,
+                "left": 60
+              }}
+              padding={0.45}
+              colors='set3'
+              colorBy='id'
+              borderColor="inherit:darker(1.6)"
+              borderWidth={2}
+              axisBottom={{
+                  "orient": "bottom",
+                  "tickSize": 5,
+                  "tickPadding": 5,
+                  "tickRotation": 0,
+                  "legend": question.label,
+                  "legendPosition": "center",
+                  "legendOffset": 36
+              }}
+              axisLeft={{
+                  "orient": "left",
+                  "tickSize": 5,
+                  "tickPadding": 5,
+                  "tickRotation": 0,
+                  "legend": "FREQUENCY",
+                  "legendPosition": "center",
+                  "legendOffset": -40
+              }}
+              labelSkipWidth={12}
+              labelSkipHeight={12}
+              labelTextColor="inherit:darker(1.6)"
+              animate={true}
+              motionStiffness={90}
+              motionDamping={15}
+              legends={[
+                  {
+                      "dataFrom": "keys",
+                      "anchor": "bottom-right",
+                      "direction": "column",
+                      "translateX": 120,
+                      "itemWidth": 100,
+                      "itemHeight": 20,
+                      "itemsSpacing": 2,
+                      "symbolSize": 20
+                  }
+            ]}/>
           )
         }
         break;
