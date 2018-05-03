@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Collection, CollectionItem, Modal, Row, Button, Tabs, Tab} from 'react-materialize';
 import {VictoryChart, VictoryLine, VictoryTheme} from 'victory';
-import { ResponsivePie, ResponsiveBar,ResponsiveLine } from 'nivo';
+import { ResponsivePie, ResponsiveBar } from 'nivo';
 import _ from 'lodash';
 import Math from 'mathjs'
 import styles from '../stylesheets/CreateSurvey.css';
-
-
 
 class Chart extends React.Component {
   constructor(props) {
@@ -92,18 +90,7 @@ class Chart extends React.Component {
               animate={true}
               motionStiffness={90}
               motionDamping={15}
-              legends={[
-                  {
-                      "dataFrom": "keys",
-                      "anchor": "bottom-right",
-                      "direction": "column",
-                      "translateX": 120,
-                      "itemWidth": 100,
-                      "itemHeight": 20,
-                      "itemsSpacing": 2,
-                      "symbolSize": 20
-                  }
-            ]}/>
+            />
           );
       case 'Number':
         let array = _.map(answers, function(a) {return a.response});
@@ -112,7 +99,7 @@ class Chart extends React.Component {
           let mode = Math.mode(array);
           if(Array.isArray(mode)) mode=_.max(mode);
           stat.push({id:'Min', x:'Min', y:parseInt(_.min(array))})
-          stat.push({id:'Mean', x:'Mean', y:Math.mean(array)})
+          stat.push({id:'Mean', x:'Mean', y:parseInt(_.mean(array))})
           stat.push({id:'Median', x:'Median', y:Math.median(array)})
           stat.push({id:'Mode', x:'Mode', y:parseInt(mode)})
           stat.push({id:'Max', x:'Max', y:parseInt(_.max(array))})

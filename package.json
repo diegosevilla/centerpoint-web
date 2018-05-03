@@ -26,7 +26,6 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "lodash": "^4.17.10",
-    "math.js": "^1.1.43",
     "mathjs": "^4.2.1",
     "morgan": "^1.9.0",
     "nivo": "^0.31.0",
