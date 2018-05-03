@@ -1,4 +1,4 @@
-import React from 'react';
+eimport React from 'react';
 import PropTypes from 'prop-types';
 import {Collection, CollectionItem, Modal, Row, Button, Tabs, Tab} from 'react-materialize';
 import {VictoryChart, VictoryLine, VictoryTheme} from 'victory';
@@ -97,6 +97,7 @@ class Chart extends React.Component {
         let stat = [];
         if(array.length > 0){
           let tempMode = Math.mode(array);
+          alert(tempMode);
           let mode = (Array.isArray(tempMode))? _.max(tempMode) : tempMode;
           alert(mode);
           stat.push({id:'Min', x:'Min ('+_.min(array)+')', y:0})
