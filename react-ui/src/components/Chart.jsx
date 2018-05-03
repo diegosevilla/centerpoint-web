@@ -1,4 +1,4 @@
-eimport React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {Collection, CollectionItem, Modal, Row, Button, Tabs, Tab} from 'react-materialize';
 import {VictoryChart, VictoryLine, VictoryTheme} from 'victory';
@@ -101,7 +101,7 @@ class Chart extends React.Component {
           let mode = (Array.isArray(tempMode))? _.max(tempMode) : tempMode;
           alert(mode);
           stat.push({id:'Min', x:'Min ('+_.min(array)+')', y:0})
-          stat.push({id:'Mode', x:'Mode', y:mode})
+          //stat.push({id:'Mode', x:'Mode', y:mode})
           stat.push({id:'Mean', x:'Mean', y:Math.mean(array)})
           stat.push({id:'Median', x:'Median', y:Math.median(array)})
           stat.push({id:'Max', x:'Max ('+_.max(array)+')', y:0})
