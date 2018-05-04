@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Collection, CollectionItem, Modal, Row, Button, Tabs, Tab} from 'react-materialize';
 import {VictoryChart, VictoryLine, VictoryTheme} from 'victory';
-import { ResponsivePie, ResponsiveBar } from 'nivo';
+import { ResponsivePie, ResponsiveBar,ResponsiveLine } from 'nivo';
 import _ from 'lodash';
 import Math from 'mathjs'
 import styles from '../stylesheets/CreateSurvey.css';
@@ -99,28 +99,65 @@ class Chart extends React.Component {
         if(array.length > 0){
           let tempMode = Math.mode(array);
           let mode = (Array.isArray(tempMode))? _.max(tempMode) : tempMode;
-          stat.push({id:'Min', x:'Min ('+_.min(array)+')', y:0})
-          stat.push({id:'Mode', x:'Mode', y:mode})
           stat.push({id:'Mean', x:'Mean', y:Math.mean(array)})
           stat.push({id:'Median', x:'Median', y:Math.median(array)})
-          stat.push({id:'Max', x:'Max ('+_.max(array)+')', y:0})
+          stat.push({id:'Mode', x:'Mode', y:mode})
           chart.push(
             <Tabs className='tab-demo z-depth-1'>
               <Tab title="Statistics">
                 <div style={{backgroundColor: 'white', height: 350}}>
                   <h5> {question.label} </h5>
-                  <VictoryChart
-                    theme={VictoryTheme.material}
-                  >
-                    <VictoryLine
-                      style={{
-                        data: { stroke: "#c43a31" },
-                        parent: { border: "1px solid #ccc"}
+                    <ResponsiveLine
+                      data={[{id:question.label, data:stat}]}
+                      margin={{
+                          "top": 50,
+                          "right": 110,
+                          "bottom": 50,
+                          "left": 60
                       }}
-                      interpolation='cardinal'
-                      data={stat}
-                    />
-                  </VictoryChart>
+                      minY="auto"
+                      stacked={true}
+                      curve="cardinal"
+                      axisBottom={{
+                          "orient": "bottom",
+                          "tickSize": 5,
+                          "tickPadding": 5,
+                          "tickRotation": 0,
+                          "legend": "country code",
+                          "legendOffset": 36,
+                          "legendPosition": "center"
+                      }}
+                      axisLeft={{
+                          "orient": "left",
+                          "tickSize": 5,
+                          "tickPadding": 5,
+                          "tickRotation": 0,
+                          "legend": "count",
+                          "legendOffset": -40,
+                          "legendPosition": "center"
+                      }}
+                      dotSize={10}
+                      dotColor="inherit:darker(0.3)"
+                      dotBorderWidth={2}
+                      dotBorderColor="#ffffff"
+                      enableDotLabel={true}
+                      dotLabel="y"
+                      dotLabelYOffset={-12}
+                      animate={true}
+                      motionStiffness={90}
+                      motionDamping={15}
+                      legends={[
+                          {
+                              "anchor": "bottom-right",
+                              "direction": "column",
+                              "translateX": 100,
+                              "itemWidth": 80,
+                              "itemHeight": 20,
+                              "symbolSize": 12,
+                              "symbolShape": "circle"
+                          }
+                      ]}
+                  />
                 </div>
               </Tab>
               <Tab active title="Results">
