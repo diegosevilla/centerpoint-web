@@ -9,7 +9,11 @@ const $ = window.$;
 const Materialize = window.Materialize;
 class AddModal extends Component{
     state = {
-      type: 'Text'
+      type: ''
+    }
+
+    componentWillMount(){
+      this.setState({type: 'Text'});
     }
 
     add(e) {
