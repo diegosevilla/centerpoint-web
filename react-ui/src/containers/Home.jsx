@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSurvey } from './../actions/index';
 import styles from './../stylesheets/Home.css';
 import _ from 'lodash';
+import GoogleLogin from 'react-google-login';
 
 const Materialize = window.Materialize;
 const $ = window.$;
@@ -27,6 +28,10 @@ class Home extends Component{
     .then((surveys) => {
       this.setState({isLoading:false,  surveys: surveys});
     })
+  }
+
+  responseGoogle = (response) => {
+    console.log(response);
   }
 
   createSurveyEvent (e){
@@ -120,6 +125,14 @@ class Home extends Component{
                   <Modal header='Find Survey' trigger={<Button className='createSurvey btn-large waves-effect waves-light blue-grey darken-1'>View Result</Button>}>
                     {viewData}
                   </Modal>
+                  <Row>
+                  <GoogleLogin
+                   clientId="504260256093-2t6sc1e95aetvpdvpd4t5sn96kkt09p4.apps.googleusercontent.com"
+                   buttonText="Login"
+                   onSuccess={this.responseGoogle}
+                   onFailure={this.responseGoogle}
+                  />
+                  </Row>
                 </div>
               </div>
               <div className='empty'></div>

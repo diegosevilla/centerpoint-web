@@ -123,7 +123,7 @@ class Chart extends React.Component {
                           "tickSize": 5,
                           "tickPadding": 5,
                           "tickRotation": 0,
-                          "legend": "country code",
+                          "legend": question.label,
                           "legendOffset": 36,
                           "legendPosition": "center"
                       }}
