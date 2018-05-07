@@ -27,6 +27,7 @@ class Home extends Component{
   logInFxn = (response) => {
     let data = response.profileObj;
     this.props.login(data).then((res) => {
+      alert(res.code);
       if(res.code == 200)
         window.location = '/user';
       else
