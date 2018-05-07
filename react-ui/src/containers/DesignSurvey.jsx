@@ -37,12 +37,6 @@ class CreateSurvey extends Component{
     })
   }
 
-  componentDidUpdate(){
-    $('#surveyName').val(this.props.survey.surveyName);
-    $('#author').val(this.props.survey.author);
-    $('#details').val(this.props.survey.details);
-  }
-
   remove(e, input){
     if(!window.confirm('Are you sure you want to remove this question?')) return;
     this.props.deleteQuestion(input.id)
@@ -117,7 +111,7 @@ class CreateSurvey extends Component{
       return(
         <Row style={{width:'100%', marginTop: '25%'}} className="center">
             <Preloader size='big'/>
-            <h1> Creating Survey </h1>
+            <h1> Loading Survey </h1>
         </Row>
       )
     else
@@ -138,11 +132,10 @@ class CreateSurvey extends Component{
                 <h5> By: {survey.author} </h5>
                 <h5> {survey.details} </h5>
               </div>
-              <Modal id='editSurvey' header='Edit Survey' trigger={<Button className="btnEditTitle blue-grey dark-1"><Icon> edit </Icon> Edit Survey </Button>}>
+              <Modal id='editSurvey' header='Edit Survey Details' trigger={<Button className="btnEditTitle blue-grey dark-1"><Icon> edit </Icon> Edit Survey Details </Button>}>
                 <form onSubmit={(e) => this.editSurvey(e) }>
-                  <Input id='surveyName' required='true' label='Survey Title'/>
-                  <Input id='author' required='true' label='Author'/>
-                  <Input type='textarea' id='details' label='Details (short description of the survey)'/>
+                  <Input id='surveyName' required='true' defaultValue={survey.surveyName} label='Survey Title'/>
+                  <Input type='textarea' id='details' defaultValue={survey.details} label='Details (short description of the survey)'/>
                   <Input className='btn blue-grey darken-1' type='submit'/>
                 </form>
               </Modal>
