@@ -25,7 +25,7 @@ class CreateSurvey extends Component{
     };
   }
   componentWillMount(){
-    let id = window.location.pathname.replace(/\/create-survey\//, '');
+    let id = window.location.pathname.replace(/\/design-survey\//, '');
     this.props.fetchSurvey(id)
     .then(()=>{
       if(this.props.survey.id === -1){
@@ -60,7 +60,7 @@ class CreateSurvey extends Component{
       }
     }).then((res) => {
       if(res.status === 200)
-        window.location = '/';
+        window.location = '/user';
       else
         Materialize.toast('Error removing question', 2000, 'red lighten-1')
     })
@@ -81,7 +81,7 @@ class CreateSurvey extends Component{
 
   submit(e){
     e.preventDefault();
-    window.location = '/';
+    window.location = '/user';
   }
 
   render() {
@@ -123,6 +123,9 @@ class CreateSurvey extends Component{
     else
     return(
       <div className='bgCS'>
+        <div className="home center">
+          <Button floating large className='teal darken-2' waves='light' icon='home' onClick={(e) => {e.preventDefault() ; window.location = '/user'}}/>
+        </div>
         <div>
           <div className="essentials center">
             <div className="survId center">
@@ -144,10 +147,10 @@ class CreateSurvey extends Component{
                 </form>
               </Modal>
               <AddModal surveyId={survey.id+''}/>
-              <Modal header='Survey successfully created' trigger={<Button className="btnSubmit blue-grey dark-1"> <Icon> file_upload </Icon> Submit </Button>} actions={<Button onClick={(e)=> this.submit(e)}> Ok </Button>}>
+              <Modal header='Survey saved!' trigger={<Button className="btnSubmit blue-grey dark-1"> <Icon> file_upload </Icon> Save Survey </Button>} actions={<Button onClick={(e)=> this.submit(e)}> Ok </Button>}>
                 <h5> Use the survey ID: {survey.surveyId} to access the survey using the mobile app. </h5>
               </Modal>
-              <Button className="btnCancel red dark-1" onClick={(e) => this.cancel(e)}> <Icon> cancel </Icon> Cancel Survey </Button>
+              <Button className="btnCancel red dark-1" onClick={(e) => this.cancel(e)}> <Icon> cancel </Icon> Delete Survey </Button>
             </Row>
           </div>
          <Row className="questionRow">

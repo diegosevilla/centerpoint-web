@@ -27,8 +27,18 @@ module.exports= {
     });
   },
 
+  findByAuthor: function (req, res, next){
+    Survey.findAll({ where: {author:req.params.author}})
+    .then((survey) => {
+      res.status(200).send(survey)
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send(err);
+    });
+  },
+
   findBySurveyID: function(req, res, next){
-    console.log(req.params.id);
     Survey.find({ where: {surveyId:req.params.id}, include: [Question]})
     .then((survey) => {
       if(!survey) res.status(404).send({id:-1});

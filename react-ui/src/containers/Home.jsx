@@ -7,100 +7,39 @@ import styles from './../stylesheets/Home.css';
 import _ from 'lodash';
 import GoogleLogin from 'react-google-login';
 
+import { login, check, logOut } from './../actions/index';
+
 const Materialize = window.Materialize;
 const $ = window.$;
 
 class Home extends Component{
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: true,
-      surveys: [],
-      surveyId: '',
-      surveyName: '',
-      author: '',
-    };
   }
 
-  componentDidMount(){
-    fetch('/api/survey/')
-    .then((res) => res.json())
-    .then((surveys) => {
-      this.setState({isLoading:false,  surveys: surveys});
-    })
+  componentWillMount(){
+    this.props.check().then((user)=>{
+      if(user.code == 200)
+        window.location = '/user';
+    });
   }
 
-  responseGoogle = (response) => {
-    console.log(response);
+  logInFxn = (response) => {
+    let data = response.profileObj;
+    this.props.login(data).then((res) => {
+      if(res.code == 200)
+        window.location = '/user';
+      else
+        Materialize.toast(res.msg, 5000, 'red lighten-1');
+    });
   }
 
-  createSurveyEvent (e){
-      e.preventDefault();
-      let newSurvey = {
-        surveyName: $('#surveyName').val(),
-        author: $('#author').val(),
-        details: $('#surveyDetails').val()
-      }
-      this.props.createSurvey(newSurvey).then((res) => {
-        if(this.props.survey.id)
-          window.location = '/create-survey/' + this.props.survey.id;
-        else
-          throw ({message:'Error creating survey'});
-      })
-      .catch((err) => {
-        console.log(JSON.stringify(err));
-        Materialize.toast(err.message, 5000, 'red lighten-1');
-      })
+  errorFxn = (response) => {
+    console.log(JSON.stringify(response));
   }
+
 
   render() {
-    const {surveyName, isLoading, author, surveyId, surveys} = this.state;
-    let filteredSurveys = _.filter(surveys, function(s) { return ( s.surveyName.includes(surveyName) &&  s.author.includes(author) && s.surveyId.includes(surveyId)) });
-    var viewData = [];
-
-    if(isLoading){
-      viewData.push(
-        <Row style={{width:'100%', marginTop: '25%'}} className="center">
-          <Preloader size='big'/>
-          <h4> Fetching Surveys </h4>
-        </Row>
-      )
-    } else {
-      let temp = [];
-      _.forEach(filteredSurveys, function(survey){
-        temp.push(
-          <tr onClick={()=> window.location='/view-result/'+survey.id}>
-            <td> {survey.surveyName} </td>
-            <td> {survey.author} </td>
-            <td> {survey.surveyId} </td>
-          </tr>
-        )
-      });
-      viewData.push(
-        <Row>
-          <Table>
-            <thead>
-              Filter by:
-              <tr>
-                <th data-field="title">
-                  <Input onChange={(e)=>{this.setState({surveyName: $('#filterName').val()})}} id='filterName'  label='Survey Title'/>
-                </th>
-                <th data-field="author">
-                  <Input onChange={(e)=>{this.setState({author: $('#filterAuthor').val()})}} id='filterAuthor' label='Author'/>
-                </th>
-                <th data-field="id">
-                  <Input onChange={(e)=>{this.setState({surveyId: $('#filterId').val()})}} id='filterId' label='SurveyId'/>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {temp}
-            </tbody>
-          </Table>
-        </Row>
-      )
-    }
-
     return(
       <div>
         <div className='bg'>
@@ -114,24 +53,13 @@ class Home extends Component{
                   <h5 className='headerCreate col s12 light'>Web Application for Creating and Designing Surveys</h5>
                 </div>
                 <div className='row center'>
-                  <Modal header='Create New Survey' trigger={<Button className='createSurvey btn-large waves-effect waves-light blue-grey darken-1'>Create Survey</Button>}>
-                    <form onSubmit={(e) => this.createSurveyEvent(e) }>
-                      <Input id='surveyName' required='true' label='Survey Title'/>
-                      <Input id='author' required='true' label='Author'/>
-                      <Input type='textarea' id='surveyDetails' label='Details (short description of the survey)'/>
-                      <Input className='btn blue-grey darken-1' type='submit'/>
-                    </form>
-                  </Modal>
-                  <Modal header='Find Survey' trigger={<Button className='createSurvey btn-large waves-effect waves-light blue-grey darken-1'>View Result</Button>}>
-                    {viewData}
-                  </Modal>
                   <Row>
-                  <GoogleLogin
-                   clientId="504260256093-2t6sc1e95aetvpdvpd4t5sn96kkt09p4.apps.googleusercontent.com"
-                   buttonText="Login"
-                   onSuccess={this.responseGoogle}
-                   onFailure={this.responseGoogle}
-                  />
+                    <GoogleLogin
+                     clientId="780648072300-os8d56m9bjovvcqu9krlf6hn0lvv4vhp.apps.googleusercontent.com"
+                     buttonText="Login using Gmail"
+                     onSuccess={this.logInFxn}
+                     onFailure={this.errorFxn}
+                    />
                   </Row>
                 </div>
               </div>
@@ -164,9 +92,12 @@ class Home extends Component{
 Home.propTypes = {
   survey: PropTypes.object.isRequired,
   createSurvey: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  check: PropTypes.func.isRequired,
+  logOut: PropTypes.func.isRequired
 };
 
 export default connect(
   state => ({ survey: state.survey }),
-  { createSurvey }
+  { createSurvey, login, check, logOut}
 )(Home)

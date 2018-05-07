@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {PropTypes}  from 'prop-types';
-import {Button, Icon, Row, Input, Modal, Col, Preloader} from 'react-materialize';
+import {Button, Row, Preloader} from 'react-materialize';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -69,7 +69,7 @@ class ViewResult extends Component{
         <div>
           <div className="resultHeader center ">
               <div className="home center">
-                <Button floating large className='teal darken-2' waves='light' icon='home' onClick={(e) => {e.preventDefault() ; window.location = '/'}}/>
+                <Button floating large className='teal darken-2' waves='light' icon='home' onClick={(e) => {e.preventDefault() ; window.location = '/user'}}/>
               </div>
               <br/>
               <div className="resultTitle center">

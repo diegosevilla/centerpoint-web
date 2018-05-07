@@ -1,3 +1,5 @@
+import { sessionService } from 'redux-react-session';
+
 export function getSurvey(){
     return (dispatch) => {
       dispatch({type:'getSurvey'});
@@ -10,6 +12,39 @@ export function setSurvey(survey){
     type: SET_SURVEY,
     survey: survey
   };
+}
+
+export function login(data){
+  return () => {
+    return sessionService.saveSession(data)
+    .then(() => {
+      return sessionService.saveUser(data)
+      .then(() => {
+        return {code: 200, msg: 'Login success'}
+      })
+    }).catch((err) => {return {code: 500, msg:'Error logging in'}});
+  }
+}
+
+export function check(){
+  return () => {
+    return sessionService.loadUser()
+      .then((data) => {
+        return {code: 200, user: data}
+      }).catch((err) => {return {code: 500, err}});
+  }
+}
+
+export function logOut(){
+  return () => {
+    return sessionService.deleteSession()
+      .then(() => {
+        return sessionService.deleteUser()
+        .then(() => {
+          return {code: 200}
+        })
+      }).catch((err) => {return {code: 500, msg:'Error logging out'}});
+  }
 }
 
 export const FETCH_SURVEY = 'FETCH_SURVEY';

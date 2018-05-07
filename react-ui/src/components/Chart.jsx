@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Collection, CollectionItem, Modal, Row, Button, Tabs, Tab} from 'react-materialize';
-import {VictoryChart, VictoryLine, VictoryTheme} from 'victory';
+import { Collection, CollectionItem, Tabs, Tab} from 'react-materialize';
 import { ResponsivePie, ResponsiveBar,ResponsiveLine } from 'nivo';
 import _ from 'lodash';
 import Math from 'mathjs'
