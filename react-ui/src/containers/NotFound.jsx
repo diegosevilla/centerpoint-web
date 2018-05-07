@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 
 class NotFound extends Component{
-    componentWillMount(){
-      alert
-      //window.location = '/'
-    }
-
     render() {
       return(
         <div className="center">

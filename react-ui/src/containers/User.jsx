@@ -1,11 +1,10 @@
 import React, {Component} from 'react'
 import {PropTypes}  from 'prop-types';
-import {Button, Modal, Input, Icon, Row, Preloader, Table, Navbar, NavItem} from 'react-materialize';
+import {Button, Modal, Input  , Row, Preloader, Table, Navbar, NavItem} from 'react-materialize';
 import { connect } from 'react-redux';
 import { createSurvey } from './../actions/index';
 import styles from './../stylesheets/Home.css';
 import _ from 'lodash';
-import GoogleLogin from 'react-google-login';
 
 import { login, check, logOut } from './../actions/index';
 
@@ -26,7 +25,7 @@ class User extends Component{
 
   componentWillMount(){
     this.props.check().then((user)=>{
-      if(user.code == 200){
+      if(user.code === 200){
         fetch('/api/survey/author/'+user.user.email)
         .then((res) => res.json())
         .then((surveys) => {
@@ -39,9 +38,26 @@ class User extends Component{
     });
   }
 
+  remove(survey){
+    if(!window.confirm('Are you sure you want to delete this survey?')) return;
+    let id = survey.id;
+    fetch('/api/survey/cancel/'+id, {
+      method: 'POST',
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+      }
+    }).then((res) => {
+      if(res.status === 200){
+        Materialize.toast('Successfully deleted survey', 2000, 'green lighten-1');
+        this.setState({surveys: _.without(this.state.surveys, survey)});
+      } else
+        Materialize.toast('Error deleting survey', 2000, 'red lighten-1')
+    })
+  }
+
   logoutFxn = () =>  {
     this.props.logOut().then((res) => {
-      if(res.code == 200)
+      if(res.code === 200)
         window.location = '/'
     });
 
@@ -58,16 +74,14 @@ class User extends Component{
       if(this.props.survey.id)
         window.location = '/design-survey/' + this.props.survey.id;
       else
-        throw ({message:'Error creating survey'});
+        throw ({code:500, message:'Error fetching survey'});
     })
     .catch((err) => {
-      console.log(JSON.stringify(err));
       Materialize.toast(err.message, 5000, 'red lighten-1');
     })
   }
 
   render() {
-
     if(this.state.isLoading)
       return(
         <Row style={{width:'100%', marginTop: '25%'}} className="center">
@@ -78,22 +92,24 @@ class User extends Component{
 
     const {user, surveys, surveyName, surveyId} = this.state;
 
-    const filteredSurveys = _.filter(surveys, function(s) { return ( s.surveyName.includes(surveyName) && s.surveyId.includes(surveyId)) });
+    const filteredSurveys = _.filter(surveys, function(s) { return ( s.surveyName.includes(surveyName)) });
     let temp = [];
-    if(filteredSurveys.length == 0)
+    if(filteredSurveys.length === 0)
       temp.push(<h5> No Surveys Yet </h5>);
-    _.forEach(filteredSurveys, function(survey){
-      temp.push(
-        <tr>
-          <td> {survey.surveyName} </td>
-          <td> {survey.surveyId} </td>
-          <td>
-            <Button small className='green' onClick={()=> window.location='/design-survey/'+survey.id} waves='light'> Edit Survey </Button>
-            <Button small className='blue' onClick={()=> window.location='/view-result/'+survey.id} waves='light'> View Result </Button>
-          </td>
-        </tr>
-      )
-    });
+    else
+      filteredSurveys.forEach((survey) => {
+        temp.push(
+          <tr>
+            <td> {survey.surveyName} </td>
+            <td> {survey.details} </td>
+            <td>
+              <Button small style={{margin: 5}} className='blue' onClick={() => window.location = '/view-result/'+survey.id} waves='light'> View Result </Button>
+              <Button small style={{margin: 5}} className='green' onClick={() => window.location = '/design-survey/'+survey.id} waves='light'> Edit Survey </Button>
+              <Button small style={{margin: 5}} className='red' onClick={() => this.remove(survey)} waves='light'> Delete Survey </Button>
+            </td>
+          </tr>
+        )
+      });
 
     return(
       <div>
@@ -102,6 +118,13 @@ class User extends Component{
         </Navbar>
         <div>
           <Row style={{backgroundColor: 'white', paddingTop: 50, width:'80%'}}>
+            <Modal header='Create New Survey' trigger={<Button className='createSurvey btn-large waves-effect waves-light amber darken-3'>Create New Survey</Button>}>
+              <form onSubmit={(e) => this.createSurveyEvent(e) }>
+                <Input id='surveyName' required='true' label='Survey Title'/>
+                <Input type='textarea' id='surveyDetails' label='Details (short description of the survey)'/>
+                <Input className='btn blue-grey darken-1' type='submit'/>
+              </form>
+            </Modal>
             <Table>
               <thead>
                 <tr>
@@ -109,7 +132,7 @@ class User extends Component{
                     <Input onChange={(e)=>{this.setState({surveyName: $('#filterName').val()})}} id='filterName'  label='Survey Title'/>
                   </th>
                   <th data-field="id">
-                    <Input onChange={(e)=>{this.setState({surveyId: $('#filterId').val()})}} id='filterId' label='SurveyId'/>
+                    Details
                   </th>
                   <th data-field="id">
                     Options
@@ -120,13 +143,6 @@ class User extends Component{
                 {temp}
               </tbody>
             </Table>
-            <Modal header='Create New Survey' trigger={<Button className='createSurvey btn-large waves-effect waves-light blue-grey darken-1'>Create New Survey</Button>}>
-              <form onSubmit={(e) => this.createSurveyEvent(e) }>
-                <Input id='surveyName' required='true' label='Survey Title'/>
-                <Input type='textarea' id='surveyDetails' label='Details (short description of the survey)'/>
-                <Input className='btn blue-grey darken-1' type='submit'/>
-              </form>
-            </Modal>
           </Row>
         </div>
       </div>

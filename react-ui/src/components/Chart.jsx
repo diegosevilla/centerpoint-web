@@ -35,6 +35,12 @@ class Chart extends React.Component {
     let {answers, data} = this.state;
     const chart = [];
 
+    if(data.length === 0)
+      return(
+        <div style={{backgroundColor: 'white', height: 500, padding: 10}}>
+          <h5> No Results Yet </h5>
+        </div>
+      )
     data = _.sortBy(data,[function(d) { return d.name; }]);
     answers = _.sortBy(answers, [function(d) { return d.response}])
     switch (question.questionType) {
