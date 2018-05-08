@@ -25,7 +25,6 @@ class Chart extends React.Component {
       for(let key in temp){
         data.push({id: key, key: key, value: temp[key]});
       }
-
       this.setState({data:data, answers: answers});
     })
   };
@@ -38,6 +37,7 @@ class Chart extends React.Component {
     if(data.length === 0)
       return(
         <div style={{backgroundColor: 'white', height: 500, padding: 10}}>
+          <h4> {question.id +') ' + question.label} </h4>
           <h5> No Results Yet </h5>
         </div>
       )
@@ -46,11 +46,11 @@ class Chart extends React.Component {
     switch (question.questionType) {
       case 'Text':
         chart.push(
-          <Collection header={question.label}>
+          <Collection key={question.id + 'collection'} header={question.label}>
             <div className='innerbox'>
               {
-                answers.map((answer)=>{
-                  return <CollectionItem style={{borderStyle: 'line'}}> {answer.response} </CollectionItem>
+                answers.map((answer, index)=>{
+                  return <CollectionItem key={index} style={{borderStyle: 'line'}}> {answer.response} </CollectionItem>
                 })
               }
             </div>
@@ -108,7 +108,7 @@ class Chart extends React.Component {
           stat.push({id:'Median', x:'Median', y:Math.median(array)})
           stat.push({id:'Mode', x:'Mode', y:mode})
           chart.push(
-            <Tabs className='tab-demo z-depth-1'>
+            <Tabs className='tab-demo z-depth-1' key={question.id + ' tabs'}>
               <Tab title="Statistics">
                 <div style={{backgroundColor: 'white', height: 350}}>
                   <h5> {question.label} </h5>
@@ -202,7 +202,7 @@ class Chart extends React.Component {
         break;
       default:
         chart.push(
-          <div style={{backgroundColor: 'white', height: 450}}>
+          <div key={question.label + ' pie'} style={{backgroundColor: 'white', height: 450}}>
             <h5> {question.label} </h5>
             <ResponsivePie data={data}
               height={450}

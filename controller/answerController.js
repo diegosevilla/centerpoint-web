@@ -1,6 +1,7 @@
 const db = require('../db') //this is required
 const sequelize = require('sequelize');
 
+const Op = sequelize.Op;
 const Answer = require('../db/models/answer');
 const Question = require('../db/models/question');
 
@@ -14,6 +15,27 @@ module.exports= {
       res.status(200).send(answers);
     })
     .catch((err)=>{
+      res.status(500).send(err);
+    })
+  },
+
+  findBySurvey: function(req, res, next){
+    Question.findAll({
+      attributes:['id', 'label'],
+      where: {survey_id: req.params.surveyId},
+    })
+    .then((questions) =>{
+      const array = questions.map(q => q.id);
+      Answer.findAll({
+        attributes:{ exclude: ['created_at', 'updated_at'] },
+        where: {question_id: {[Op.in]: array}}
+      })
+      .then((answers)=>{
+          res.status(200).send({questions, answers});
+      })
+    })
+    .catch((err) => {
+      console.log(err);
       res.status(500).send(err);
     })
   },

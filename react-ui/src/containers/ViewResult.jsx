@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {PropTypes}  from 'prop-types';
-import {Button, Row, Preloader} from 'react-materialize';
+import {Button, Row, Preloader, Tabs, Tab, Pagination} from 'react-materialize';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -12,7 +12,10 @@ class ViewResult extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      data: [],
+      questions: [],
+      page: 1,
     };
   }
 
@@ -24,22 +27,55 @@ class ViewResult extends Component{
         alert('Invalid Survey!');
         window.location = '/';
       } else {
-        this.setState({isLoading: false});
+        fetch('/api/answer/survey/'+id)
+        .then((res) => res.json())
+        .then((responses) => {
+          let temp = [];
+          let answers = responses.answers;
+          answers.forEach((answer) => {
+            let r = _.find(temp, {responseCount: answer.responseCount, question_id: answer.question_id});
+            if(!r)
+              temp.push(answer);
+            else{
+              r.response += ', ' + answer.response
+            }
+          });
+          let data = _.groupBy(temp, function(a){return a.responseCount});
+          this.setState({isLoading: false, data, questions: responses.questions });
+        })
       }
-
     })
+  }
+
+  getData(){
+    const index = this.state.page;
+    const responses = this.state.data[index];
+    const questions = this.state.questions;
+    const data = [];
+    data.push(<h5 className='center'> Response # {index} </h5>);
+    responses.forEach((response) => {
+      let q = _.find(questions, {id: response.question_id})
+      data.push(
+        <div className='center' style={{padding: 10, marginLeft: '30%', width: '40%', backgroundColor: 'green'}}>
+          <h4 className='center'> {q.label} </h4>
+          <h5 className='center'> {response.response} </h5>
+        </div>
+      );
+    });
+    return data;
   }
 
   render() {
     const { survey } = this.props;
-    let  inputs = [];
+    const { data, questions, isLoading } = this.state;
+    let  dataAnalysis = [];
 
     let sortedQuestions = _.sortBy(this.props.survey.questions, (questions) => {
          return questions.id;
      });
 
      sortedQuestions.forEach((q) => {
-       inputs.push(
+       dataAnalysis.push(
          <div style={{
             padding: '10px',
             width: '50%',
@@ -56,7 +92,7 @@ class ViewResult extends Component{
        )
      })
 
-    if(this.state.isLoading)
+    if(isLoading)
       return(
         <Row style={{width:'100%', marginTop: '25%'}} className="center">
             <Preloader size='big'/>
@@ -73,13 +109,20 @@ class ViewResult extends Component{
               </div>
               <br/>
               <div className="resultTitle center">
-                <h3> {survey.surveyName} </h3>
+                <h4> {survey.surveyName} </h4>
                 <h5> {'By: ' + survey.author} </h5>
-                <h5> {survey.details} </h5>
               </div>
           </div>
          <Row className="resultBody">
-            {inputs}
+            <Tabs className='z-depth-1'>
+              <Tab title="Actual Responses" active>
+                <Pagination onSelect={(val) => this.setState({page:val})} className='center' items={Object.keys(data).length} activePage={this.state.page} maxButtons={10} />
+                {this.getData(1)}
+              </Tab>
+              <Tab title="Data Analysis">
+              {dataAnalysis}
+              </Tab>
+            </Tabs>
          </Row>
         </div>
       </div>

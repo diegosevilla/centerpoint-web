@@ -131,11 +131,11 @@ class AddModal extends Component{
                 <option value='Checkbox'>Checkbox</option>
               </Input>
               <Input id='required' type='checkbox' value='true' label='Required'/>
-              <Input hidden type='textarea' required='true' id='options' s={12} labelClassName='hidden' label='Options (Separated  by new line)'/>
+              <Input hidden type='textarea' required='false' id='options' s={12} labelClassName='hidden' label='Options (Separated  by new line)'/>
               <Input s={12} id='defaultValue' label='Default Value'/>
-              <Input hidden type='number' required='true' s={12} id='minValue' labelClassName='hidden' label='Minimum Value' defaultValue='0'/>
-              <Input hidden type='number' required='true' s={12} id='maxValue' labelClassName='hidden' label='Maximum Value'/>
-              <Input hidden type='number' required='true' s={12} id='step' labelClassName='hidden' label='Step' defaultValue='1'/>
+              <Input hidden type='number' required='false' s={12} id='minValue' labelClassName='hidden' label='Minimum Value' defaultValue='0'/>
+              <Input hidden type='number' required='false' s={12} id='maxValue' labelClassName='hidden' label='Maximum Value'/>
+              <Input hidden type='number' required='false' s={12} id='step' labelClassName='hidden' label='Step' defaultValue='1'/>
           </Row>
           <Row>
             <Input type='submit' className='btn blue-grey darken-1'/>
