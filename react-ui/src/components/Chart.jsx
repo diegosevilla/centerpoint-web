@@ -37,7 +37,7 @@ class Chart extends React.Component {
     if(data.length === 0)
       return(
         <div style={{backgroundColor: 'white', height: 500, padding: 10}}>
-          <h4> {question.id +') ' + question.label} </h4>
+          <h4> {question.label} </h4>
           <h5> No Results Yet </h5>
         </div>
       )

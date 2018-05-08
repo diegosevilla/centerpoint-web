@@ -16,6 +16,7 @@ class ViewResult extends Component{
       data: [],
       questions: [],
       page: 1,
+      active: 0
     };
   }
 
@@ -47,28 +48,30 @@ class ViewResult extends Component{
     })
   }
 
-  getData(){
-    const index = this.state.page;
-    const responses = this.state.data[index];
-    const questions = this.state.questions;
-    const data = [];
-    data.push(<h5 className='center'> Response # {index} </h5>);
-    responses.forEach((response) => {
-      let q = _.find(questions, {id: response.question_id})
-      data.push(
-        <div className='center' style={{padding: 10, marginLeft: '30%', width: '40%', backgroundColor: 'green'}}>
-          <h4 className='center'> {q.label} </h4>
-          <h5 className='center'> {response.response} </h5>
-        </div>
-      );
-    });
-    return data;
-  }
-
   render() {
     const { survey } = this.props;
-    const { data, questions, isLoading } = this.state;
+    const { data, questions, isLoading, page} = this.state;
     let  dataAnalysis = [];
+    let actualResponses = [];
+
+    if(Object.keys(data).length != 0){
+      let responses = data[page];
+      actualResponses.push(<h4 className='center'> Response # {page} </h4>);
+      responses.forEach((response) => {
+        let q = _.find(questions, {id: response.question_id})
+        actualResponses.push(
+          <div className='center' style={{ marginLeft: '30%', marginBottom: 20, paddingTop: 10, height: 120, width: '40%', borderStyle: 'solid', borderColor: 'black', backgroundColor: '#ededff'}}>
+            <h4 className='center'> {q.label} </h4>
+            <h5 className='center'>{response.response}</h5>
+          </div>
+        );
+      });
+    } else
+      actualResponses.push(
+        <div className='center' style={{backgroundColor: 'white', height: 500, padding: 10}}>
+          <h5> No Results Yet </h5>
+        </div>
+      )
 
     let sortedQuestions = _.sortBy(this.props.survey.questions, (questions) => {
          return questions.id;
@@ -114,12 +117,14 @@ class ViewResult extends Component{
               </div>
           </div>
          <Row className="resultBody">
-            <Tabs className='z-depth-1'>
-              <Tab title="Actual Responses" active>
+            <Tabs className='z-depth-1' onChange={(val) => this.setState({active:val})}>
+              <Tab title="Actual Responses" active={this.state.active%2 === 0}>
                 <Pagination onSelect={(val) => this.setState({page:val})} className='center' items={Object.keys(data).length} activePage={this.state.page} maxButtons={10} />
-                {this.getData(1)}
+                <div style={{backgroundColor: 'white', padding: 20}}>
+                  {actualResponses}
+                </div>
               </Tab>
-              <Tab title="Data Analysis">
+              <Tab title="Data Analysis"  active={this.state.active%2 === 1}>
               {dataAnalysis}
               </Tab>
             </Tabs>
