@@ -56,6 +56,7 @@ class ViewResult extends Component{
 
     if(Object.keys(data).length != 0){
       let responses = data[page];
+      responses = _.sortBy(responses,[function(r) { return r.question_id; }]);
       actualResponses.push(<h4 className='center'> Response # {page} </h4>);
       responses.forEach((response) => {
         let q = _.find(questions, {id: response.question_id})
