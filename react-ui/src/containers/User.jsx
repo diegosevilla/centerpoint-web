@@ -94,9 +94,12 @@ class User extends Component{
 
     const filteredSurveys = _.filter(surveys, function(s) { return ( s.surveyName.includes(surveyName)) });
     let temp = [];
-    if(filteredSurveys.length === 0)
-      temp.push(<h5> No Surveys Yet </h5>);
-    else
+    if(filteredSurveys.length === 0){
+      if(surveys.length == 0)
+        temp.push(<h5> No Surveys Yet </h5>);
+      else
+        temp.push(<h5> {'No survey matched the filter ' + surveyName} </h5>);
+    }else
       filteredSurveys.forEach((survey) => {
         temp.push(
           <tr>
