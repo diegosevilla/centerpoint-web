@@ -33,6 +33,7 @@ class ViewResult extends Component{
         .then((responses) => {
           let temp = [];
           let answers = responses.answers;
+          console.log(answers);
           answers.forEach((answer) => {
             let r = _.find(temp, {responseCount: answer.responseCount, question_id: answer.question_id});
             if(!r)
