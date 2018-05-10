@@ -11,6 +11,9 @@ const Answer = db.define('answer', {
   responseCount: {
     type: Sequelize.DataTypes.INTEGER
   }
+  location: {
+    type: Sequelize.DataTypes.TEXT,
+  }
 });
 
 module.exports = Answer;
