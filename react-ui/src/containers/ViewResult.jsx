@@ -36,12 +36,9 @@ class ViewResult extends Component{
           let temp = [];
           let answers = responses.answers;
           answers.forEach((answer) => {
-            let loc = answer.location.split(',');
-            console.log(loc);
-            fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + loc[0] + ',' + loc[1] + '&key=AIzaSyDRj30hfF9Q_MYYLYMdvZp4TVk7w1gOiwc')
+            fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + answer.location + '&key=AIzaSyDRj30hfF9Q_MYYLYMdvZp4TVk7w1gOiwc')
             .then((response) => response.json())
             .then((responseJson) => {
-              console.log(responseJson);
               let results = responseJson.results[0].address_components;
               answer.location = '';
               for(let i = 0 ; i < 3 ; i++){
@@ -56,6 +53,7 @@ class ViewResult extends Component{
               }
             })
           });
+          console.log(temp);
           let data = _.groupBy(temp, function(a){return a.responseCount});
           this.setState({isLoading: false, data, questions: responses.questions });
         })
