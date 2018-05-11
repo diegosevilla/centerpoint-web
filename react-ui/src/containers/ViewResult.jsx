@@ -34,26 +34,16 @@ class ViewResult extends Component{
         .then((res) => res.json())
         .then((responses) => {
           let temp = [];
-          let answers = responses.answers;
-          answers.forEach((answer) => {
-            fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + answer.location + '&key=AIzaSyDRj30hfF9Q_MYYLYMdvZp4TVk7w1gOiwc')
-            .then((response) => response.json())
-            .then((responseJson) => {
-              let results = responseJson.results[0].address_components;
-              answer.location = '';
-              for(let i = 0 ; i < 3 ; i++){
-                answer.location += results[i];
-                if(i < 2) answers.location += ', ';
-              }
-              let r = _.find(temp, {responseCount: answer.responseCount, question_id: answer.question_id});
-              if(!r)
-                temp.push(answer);
-              else{
-                r.response += ', ' + answer.response
-              }
-            })
-          });
-          console.log(temp);
+          let tempAnswers = responses.answers;
+          tempAnswers.forEach((answer) => {
+            let r = _.find(temp, {responseCount: answer.responseCount, question_id: answer.question_id});
+            if(!r)
+              temp.push(answer);
+            else{
+              r.response += ', ' + answer.response
+            }
+          })
+          console.log('helo');
           let data = _.groupBy(temp, function(a){return a.responseCount});
           this.setState({isLoading: false, data, questions: responses.questions });
         })
@@ -67,6 +57,7 @@ class ViewResult extends Component{
     let  dataAnalysis = [];
     let actualResponses = [];
 
+    console.log(data);
     if(Object.keys(data).length !== 0){
       let responses = data[page];
       responses = _.sortBy(responses,[function(r) { return r.question_id; }]);
