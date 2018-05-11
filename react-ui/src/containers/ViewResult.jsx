@@ -36,7 +36,7 @@ class ViewResult extends Component{
           let temp = [];
           let answers = responses.answers;
           answers.forEach((answer) => {
-            let loc = answer.location.split();
+            let loc = answer.location.split(',');
             console.log(loc);
             fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + loc[0] + ',' + loc[1] + '&key=AIzaSyDRj30hfF9Q_MYYLYMdvZp4TVk7w1gOiwc')
             .then((response) => response.json())
