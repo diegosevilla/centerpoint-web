@@ -16,11 +16,13 @@ class ViewResult extends Component{
       data: [],
       questions: [],
       page: 1,
-      active: 0
+      active: 0,
+      locations: {level1: [], level2: [], level3: []},
+      filter: {level1: '', level2: '', level3: ''}
     };
   }
 
-  componentWillMount(){
+  componentDidMount(){
     let id = window.location.pathname.replace(/\/view-result\//, '');
     this.props.fetchSurvey(id)
     .then(()=>{
@@ -33,15 +35,26 @@ class ViewResult extends Component{
         .then((responses) => {
           let temp = [];
           let answers = responses.answers;
-          console.log(answers);
           answers.forEach((answer) => {
-            let r = _.find(temp, {responseCount: answer.responseCount, question_id: answer.question_id});
-            if(!r)
-              temp.push(answer);
-            else{
-              r.response += ', ' + answer.response
-            }
+            let loc = answer.location.split();
+            fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + loc[0] + ',' + loc[1] + '&key=AIzaSyDRj30hfF9Q_MYYLYMdvZp4TVk7w1gOiwc')
+            .then((response) => response.json())
+            .then((responseJson) => {
+              let results = responseJson.results[0].address_components;
+              answer.location = '';
+              for(let i = 0 ; i < 3 ; i++){
+                answer.location += results[i];
+                if(i < 2) answers.location += ', ';
+              }
+              let r = _.find(temp, {responseCount: answer.responseCount, question_id: answer.question_id});
+              if(!r)
+                temp.push(answer);
+              else{
+                r.response += ', ' + answer.response
+              }
+            })
           });
+          alert(answers);
           let data = _.groupBy(temp, function(a){return a.responseCount});
           this.setState({isLoading: false, data, questions: responses.questions });
         })
@@ -55,7 +68,7 @@ class ViewResult extends Component{
     let  dataAnalysis = [];
     let actualResponses = [];
 
-    if(Object.keys(data).length != 0){
+    if(Object.keys(data).length !== 0){
       let responses = data[page];
       responses = _.sortBy(responses,[function(r) { return r.question_id; }]);
       actualResponses.push(<h4 className='center'> Response # {page} </h4>);
