@@ -55,6 +55,13 @@ class User extends Component{
     })
   }
 
+  edit(survey){
+    if(survey.responseCount === 0)
+      window.location = '/design-survey/'+survey.id;
+    else
+      alert('Cannot edit survey!');
+  }
+
   logoutFxn = () =>  {
     this.props.logOut().then((res) => {
       if(res.code === 200)
@@ -74,10 +81,7 @@ class User extends Component{
       if(this.props.survey.id)
         window.location = '/design-survey/' + this.props.survey.id;
       else
-        throw ({code:500, message:'Error fetching survey'});
-    })
-    .catch((err) => {
-      Materialize.toast(err.message, 5000, 'red lighten-1');
+        Materialize.toast('Error creating survey', 5000, 'red lighten-1');
     })
   }
 
@@ -90,12 +94,12 @@ class User extends Component{
         </Row>
       )
 
-    const {user, surveys, surveyName, surveyId} = this.state;
+    const {surveys, surveyName} = this.state;
 
     const filteredSurveys = _.filter(surveys, function(s) { return ( s.surveyName.includes(surveyName)) });
     let temp = [];
     if(filteredSurveys.length === 0){
-      if(surveys.length == 0)
+      if(surveys.length === 0)
         temp.push(<h5> No Surveys Yet </h5>);
       else
         temp.push(<h5> {'No survey matched the filter ' + surveyName} </h5>);
@@ -107,7 +111,7 @@ class User extends Component{
             <td> {survey.details} </td>
             <td>
               <Button small style={{margin: 5}} className='blue' onClick={() => window.location = '/view-result/'+survey.id} waves='light'> View Result </Button>
-              <Button small style={{margin: 5}} className='green' onClick={() => window.location = '/design-survey/'+survey.id} waves='light'> Edit Survey </Button>
+              <Button small style={{margin: 5}} className='green' onClick={() => this.edit(survey)} waves='light'> Edit Survey </Button>
               <Button small style={{margin: 5}} className='red' onClick={() => this.remove(survey)} waves='light'> Delete Survey </Button>
             </td>
           </tr>

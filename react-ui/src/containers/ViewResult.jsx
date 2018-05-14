@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {PropTypes}  from 'prop-types';
-import {Button, Row, Preloader, Tabs, Tab, Pagination} from 'react-materialize';
+import {Button, Row, Col, Input, Preloader, Tabs, Tab, Pagination} from 'react-materialize';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import styles from '../stylesheets/CreateSurvey.css';
 import Chart from '../components/Chart';
 import { fetchSurvey } from '../actions/index';
+
+const $ = window.$;
 
 class ViewResult extends Component{
   constructor(props) {
@@ -17,8 +19,8 @@ class ViewResult extends Component{
       questions: [],
       page: 1,
       active: 0,
-      locations: {level1: [], level2: [], level3: []},
-      filter: {level1: '', level2: '', level3: ''}
+      locations: [[''], [''], ['']],
+      filter: {0: '', 1: '', 2: ''}
     };
   }
 
@@ -35,7 +37,13 @@ class ViewResult extends Component{
         .then((responses) => {
           let temp = [];
           let tempAnswers = responses.answers;
+          let tempLoc = [[''], [''], ['']];
           tempAnswers.forEach((answer) => {
+            let loc = answer.location.split(',');
+            for(let i = 0 ; i < 3 ; i++){
+              if(!_.includes(tempLoc[i], loc[i]))
+                tempLoc[i].push(loc[i]);
+            }
             let r = _.find(temp, {responseCount: answer.responseCount, question_id: answer.question_id});
             if(!r)
               temp.push(answer);
@@ -43,9 +51,8 @@ class ViewResult extends Component{
               r.response += ', ' + answer.response
             }
           })
-          console.log('helo');
           let data = _.groupBy(temp, function(a){return a.responseCount});
-          this.setState({isLoading: false, data, questions: responses.questions });
+          this.setState({isLoading: false, data, questions: responses.questions, locations: tempLoc });
         })
       }
     })
@@ -53,13 +60,41 @@ class ViewResult extends Component{
 
   render() {
     const { survey } = this.props;
-    const { data, questions, isLoading, page} = this.state;
+    const { data, questions, isLoading, page, locations, filter } = this.state;
     let  dataAnalysis = [];
-    let actualResponses = [];
+    let actualResponses  = [];
 
-    console.log(data);
+    let options = [];
+
+    options.push(
+      <Col style={{'height': '100px', 'textAlign': 'center'}}>
+          Filter By Location
+      </Col>
+    );
+    for(let i = 0 ; i < locations.length ; i++){
+      let loc = locations[i];
+      let tempOp = [];
+      loc.forEach((o) => {
+        tempOp.push(<option value={o}> {o} </option>);
+      });
+
+      options.push(
+        <Col style={{'height': '100px', 'textAlign': 'center'}}>
+          <Input id={'op'+i} style={{'width':'50px', 'marginBottom': '10%'}} onChange={(val) => {
+            let temp = filter;
+            temp[i] = $('#op'+i).val();
+            this.setState({filter:temp})
+          }} type='select'>
+            {tempOp}
+          </Input>
+        </Col>
+      );
+    };
+
+    console.log(this.state);
     if(Object.keys(data).length !== 0){
       let responses = data[page];
+      //responses = _.filter(responses, function(r) { _.includes(r.location, filter[0]) && _.includes(r.location, filter[1]) && _.includes(r.location, filter[2])});
       responses = _.sortBy(responses,[function(r) { return r.question_id; }]);
       actualResponses.push(<h4 className='center'> Response # {page} </h4>);
       responses.forEach((response) => {
@@ -119,6 +154,9 @@ class ViewResult extends Component{
               <div className="resultTitle center">
                 <h4> {survey.surveyName} </h4>
                 <h5> {'By: ' + survey.author} </h5>
+                <Row style={{paddingLeft: '25%', width:'100%'}} className='center'>
+                  {options}
+                </Row>
               </div>
           </div>
          <Row className="resultBody">

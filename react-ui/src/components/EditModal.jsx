@@ -27,8 +27,19 @@ class EditModal extends Component{
           editedEntry.maxVal = $('#maxValue-'+input.id).val();
           editedEntry.step = $('#step-'+input.id).val();
           break;
+        case 'Likert-Scale':
+          let scale = $('#scale-'+input.id).val();
+          let options = '';
+          if(scale==5)
+            options = 'Strongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree';
+          else if(scale==7)
+            options = 'Very Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree';
+          else
+            options = 'Very Strongly Disagree\nVery Strongly Disagree\nStrongly Disagree\nAgree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree';
+          editedEntry.options = options.replace(new RegExp('\n','g') , '&options=');
+          break;
         default:
-          let options =  $('#options-'+input.id).val();
+          options =  $('#options-'+input.id).val();
           editedEntry.options = options.replace(new RegExp('\n','g') , '&options=');
       }
       this.props.editQuestion(editedEntry)
@@ -54,6 +65,9 @@ class EditModal extends Component{
           form.push(<Input type='number' s={12} key={'minValue-'+input.id} id={'minValue-'+input.id} label='Minimum Value' defaultValue={input.minValue}/>);
           form.push(<Input type='number' s={12} key={'maxValue-'+input.id} id={'maxValue-'+input.id} label='Maximum Value' defaultValue={input.maxValue}/>);
           form.push(<Input type='number' s={12} key={'step-'+input.id} id={'step-'+input.id} label='Step' defaultValue={input.step}/>);
+          break;
+        case 'Likert-Scale':
+          form.push(<Input type='number' s={12} key={'scale-'+input.id} id={'scale-'+input.id} label='Scale' defaultValue={input.options.length} min='5' max='9' step='2'/>);
           break;
         default:
           form.push(<Input type='textarea' required='true' key={'options-'+input.id} id={'options-'+input.id} label='Options (Separated  by new line)' defaultValue={input.options.join('\n')}/>);

@@ -74,11 +74,6 @@ class CreateSurvey extends Component{
     $('#editSurvey').modal('close');
   }
 
-  submit(e){
-    e.preventDefault();
-    window.location = '/user';
-  }
-
   render() {
     const { survey } = this.props;
     let  inputs = [];
@@ -92,8 +87,8 @@ class CreateSurvey extends Component{
       switch(input.questionType){
         case 'Text': newQuestion = <TextField key={input.id} input={input}/>; break;
         case 'Number': newQuestion = <NumberField key={input.id} input={input}/>; break;
-        case 'Options': newQuestion = <Options key={input.id} input={input}/>;break;
-        default: newQuestion = <CheckBox key={input.id} input={input}/>;
+        case 'Checkbox': newQuestion = <CheckBox key={input.id} input={input}/>;break;
+        default: newQuestion = <Options key={input.id} input={input}/>;
       }
       inputs.push(
         <Row className="center" key={input.id} style={{'marginTop': '1%', 'width': '50%'}}>
