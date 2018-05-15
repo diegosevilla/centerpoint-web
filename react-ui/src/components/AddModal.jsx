@@ -47,7 +47,7 @@ class AddModal extends Component{
         else if(scale==7)
           $('#options').val('Very Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree');
         else
-          $('#options').val('Extremely Disagree\nVery Strongly Disagree\nStrongly Disagree\nAgree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree');
+          $('#options').val('Extremely Disagree\nVery Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree\nExtremely Agree');
       default:
         let options =  $('#options').val().split('\n');
         if(options.length == 1){
@@ -55,7 +55,6 @@ class AddModal extends Component{
           return
         }
         newQuestion.options = options.join('&options=');
-        alert(newQuestion.options);
     }
 
     this.props.createQuestion(newQuestion)

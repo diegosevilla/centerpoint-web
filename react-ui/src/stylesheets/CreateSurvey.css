@@ -27,6 +27,9 @@ body{}
 	display: none;
 }
 
+.rslt-tbl {
+    table-layout: fixed;
+}
 
 .home{
 	width: 20px;

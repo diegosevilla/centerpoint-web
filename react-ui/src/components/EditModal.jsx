@@ -35,7 +35,7 @@ class EditModal extends Component{
           else if(scale==7)
             options = 'Very Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree';
           else
-            options = 'Very Strongly Disagree\nVery Strongly Disagree\nStrongly Disagree\nAgree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree';
+            options = 'Extremely Disagree\nVery Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree\nExtremely Agree';
           editedEntry.options = options.replace(new RegExp('\n','g') , '&options=');
           break;
         default:

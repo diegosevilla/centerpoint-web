@@ -22,7 +22,6 @@ app.set('trust proxy', 1) // trust first proxy
 
 app.use('/api', require('./api'))
 
-// Always return the main index.html, so react-router render the route in the client
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'react-ui/build', 'index.html'));
 });
