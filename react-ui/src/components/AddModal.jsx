@@ -22,7 +22,6 @@ class AddModal extends Component{
     this.setState({type:'Text'});
   }
 
-
   add(e) {
     e.preventDefault();
     let newQuestion = {
@@ -73,7 +72,6 @@ class AddModal extends Component{
           Materialize.toast('Cannot find question ' + t + ' in support field', 4000, 'red lighten-1');
           return;
         }
-        cn = cn.map((c) => {return c * -1});
         newQuestion.defaultValue = su + ':' + cn;
         let scale = $('#scale').val();
         if(scale==5)

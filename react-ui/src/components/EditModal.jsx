@@ -19,7 +19,7 @@ class EditModal extends Component{
         required:$('#required-'+input.id).is(':checked'),
         id: input.id
       }
-      
+
       switch(input.questionType){
         case 'Text':
           editedEntry.defaultValue = $('#defaultValue-'+input.id).val();
