@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Modal, Button, Icon, Input} from 'react-materialize';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
+import _ from 'lodash';
 
 import { editQuestion } from './../actions/index';
 
@@ -12,12 +12,14 @@ const Materialize = window.Materialize;
 class EditModal extends Component{
     edit(e) {
       e.preventDefault();
-      let input = this.props.input;
+      const{survey, input} = this.props;
+
       let editedEntry = {
         label:$('#label-'+input.id).val(),
         required:$('#required-'+input.id).is(':checked'),
         id: input.id
       }
+      
       switch(input.questionType){
         case 'Text':
           editedEntry.defaultValue = $('#defaultValue-'+input.id).val();
@@ -28,6 +30,38 @@ class EditModal extends Component{
           editedEntry.step = $('#step-'+input.id).val();
           break;
         case 'Likert-Scale':
+          let su = $('#supports-'+input.id).val();
+          if (/[a-zA-Z]/.test(su)) {
+            Materialize.toast('Error parsing support field. Remove non numerical values', 4000, 'red lighten-1');
+            return;
+          }
+          su = su.split(',');
+          su = _.compact(su);
+          su = _.sortedUniq(su);
+          let cn = $('#contradicts-'+input.id).val();
+          if (/[a-zA-Z]/.test(cn)) {
+            Materialize.toast('Error parsing contradict field. Remove non numerical values', 4000, 'red lighten-1');
+            return;
+          }
+          cn = cn.split(',');
+          cn = _.compact(cn)
+          cn = _.sortedUniq(cn);
+          let t = _.intersection(su,cn);
+          if(cn.length != 0 && su.length != 0 && t.length !== 0){
+            Materialize.toast('This question cannot both support and contradict question number(s) ' + t.join(', ') + '.', 4000, 'red lighten-1');
+            return;
+          }
+          t = _.find(cn, function(c){return c > survey.questions.length});
+          if(t){
+            Materialize.toast('Cannot find question ' + t + ' in contradict field', 4000, 'red lighten-1');
+            return;
+          }
+          t = _.find(su, function(c){return c > survey.questions.length});
+          if(t){
+            Materialize.toast('Cannot find question ' + t + ' in support field', 4000, 'red lighten-1');
+            return;
+          }
+          editedEntry.defaultValue = su + ':' + cn;
           let scale = $('#scale-'+input.id).val();
           let options = '';
           if(scale==5)
@@ -71,7 +105,10 @@ class EditModal extends Component{
           form.push(<Input type='number' s={12} key={'step-'+input.id} id={'step-'+input.id} label='Step' defaultValue={input.step}/>);
           break;
         case 'Likert-Scale':
+          let connections = input.defaultValue? input.defaultValue.split(':') : ['', ''];
           form.push(<Input type='number' s={12} key={'scale-'+input.id} id={'scale-'+input.id} label='Scale' defaultValue={input.options.length} min='5' max='9' step='2'/>);
+          form.push(<Input s={12} id={'supports-'+input.id} label={'This question support question number/s (Separate each number with using  \' , \' )'} defaultValue={connections[0]}/>);
+          form.push(<Input s={12} id={'contradicts-'+input.id} label={'This question contradicts question number/s (Separate each number with using \' , \' )'} defaultValue={connections[1]}/>);
           break;
         default:
           form.push(<Input type='textarea' required='true' key={'options-'+input.id} id={'options-'+input.id} label='Options (Separated  by new line)' defaultValue={input.options.join('\n')}/>);

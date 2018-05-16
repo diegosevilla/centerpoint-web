@@ -107,6 +107,10 @@ class AddModal extends Component{
           $('#maxValue').val('');
           $('#step').val(1);
           break;
+        case 'Likert-Scale':
+          $('#scale').val(5);
+          $('#supports').val('');
+          $('#contradicts').val('');
         default:
           $('#options').val('');
       }
