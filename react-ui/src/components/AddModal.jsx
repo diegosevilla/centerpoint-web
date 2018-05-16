@@ -57,7 +57,7 @@ class AddModal extends Component{
         cn = cn.split(',');
         cn = _.sortedUniq(cn);
         let t = _.intersection(su,cn);
-        if(t.length !== 0){
+        if(cn.length != 0 && su.length != 0 && t.length !== 0){
           Materialize.toast('This question cannot both support and contradict question number(s) ' + t.join(', ') + '.', 4000, 'red lighten-1');
           return;
         }
