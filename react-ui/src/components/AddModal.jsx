@@ -76,9 +76,9 @@ class AddModal extends Component{
         cn = cn.map((c) => {return c * -1});
         newQuestion.defaultValue = su + ':' + cn;
         let scale = $('#scale').val();
-        if(scale===5)
+        if(scale==5)
           $('#options').val('Strongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree');
-        else if(scale===7)
+        else if(scale==7)
           $('#options').val('Very Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree');
         else
           $('#options').val('Extremely Disagree\nVery Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree\nExtremely Agree');
