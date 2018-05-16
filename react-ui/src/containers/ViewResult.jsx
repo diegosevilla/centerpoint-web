@@ -18,7 +18,6 @@ class ViewResult extends Component{
       isLoading: true,
       data: [],
       questions: [],
-      page: 1,
       active: 0,
       locations: [[''], [''], ['']],
       filter: {0: '', 1: '', 2: ''}
@@ -63,10 +62,8 @@ class ViewResult extends Component{
   render() {
     const { survey } = this.props;
     const { data, questions, isLoading } = this.state;
-    let  dataAnalysis = [];
+    let summary = [];
     let actualResponses  = [];
-
-
 
     let sortedQuestions = _.sortBy(this.props.survey.questions, (questions) => {
          return questions.id;
@@ -74,7 +71,7 @@ class ViewResult extends Component{
 
      actualResponses.push(<ResultTable questions={sortedQuestions} responses={data}/>);
      sortedQuestions.forEach((q) => {
-       dataAnalysis.push(
+       summary.push(
          <div style={{
             padding: '10px',
             width: '50%',
@@ -113,12 +110,15 @@ class ViewResult extends Component{
               </div>
           </div>
          <Row className="resultBody">
-            <Tabs className='z-depth-1' onChange={(val) => this.setState({active:val})}>
-              <Tab title="Actual Responses" active={this.state.active%2 === 0}>
+            <Tabs className='z-depth-1'>
+              <Tab title="Actual Responses" active>
                 {actualResponses}
               </Tab>
-              <Tab title="Data Analysis"  active={this.state.active%2 === 1}>
-                {dataAnalysis}
+              <Tab title="Summary">
+                {summary}
+              </Tab>
+              <Tab title="Data Analysis">
+                <h1> The survey is good </h1>
               </Tab>
             </Tabs>
          </Row>

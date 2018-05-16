@@ -39,8 +39,12 @@ class EditModal extends Component{
           editedEntry.options = options.replace(new RegExp('\n','g') , '&options=');
           break;
         default:
-          options =  $('#options-'+input.id).val();
-          editedEntry.options = options.replace(new RegExp('\n','g') , '&options=');
+          options =  $('#options-'+input.id).val().split('\n');
+          if(options.length == 1){
+            Materialize.toast('Cannot add '+ input.questionType + ' question with only one option to choose from.', 4000, 'red lighten-1');
+            return
+          }
+          editedEntry.options = options.join('&options=');
       }
       this.props.editQuestion(editedEntry)
       .then(()=>{

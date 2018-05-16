@@ -82,16 +82,17 @@ class CreateSurvey extends Component{
          return questions.id;
      });
 
+    let i = 1;
     sortedQuestions.forEach((input) => {
       let newQuestion = null;
       switch(input.questionType){
-        case 'Text': newQuestion = <TextField key={input.id} input={input}/>; break;
-        case 'Number': newQuestion = <NumberField key={input.id} input={input}/>; break;
-        case 'Checkbox': newQuestion = <CheckBox key={input.id} input={input}/>;break;
-        default: newQuestion = <Options key={input.id} input={input}/>;
+        case 'Text': newQuestion = <TextField key={input.id} input={input} number={i}/>; break;
+        case 'Number': newQuestion = <NumberField key={input.id} input={input} number={i}/>; break;
+        case 'Checkbox': newQuestion = <CheckBox key={input.id} input={input} number={i}/>;break;
+        default: newQuestion = <Options key={input.id} input={input} number={i}/>;
       }
       inputs.push(
-        <Row className="center" key={input.id} style={{'marginTop': '1%', 'width': '50%'}}>
+        <Row key={input.id} style={{'marginTop': '1%', 'width': '50%'}}>
           <Col style={{'backgroundColor': '#ededff', 'borderRadius': '5px','paddingTop': '5px', 'marginTop': '0%', 'width':'73%'}}>
             {newQuestion}
           </Col>
@@ -101,6 +102,7 @@ class CreateSurvey extends Component{
           </Col>
         </Row>
       );
+      i++;
     });
 
     if(this.state.isLoading)

@@ -4,15 +4,15 @@ import {Input,  Col} from 'react-materialize';
 
 class Options extends React.Component {
     render() {
-        const input = this.props.input;
-        const options = [];
+        const {input, number} = this.props;
+        const options = []
         input.options.forEach((o) => {
           options.push(<option value={o}> {o} </option>);
         });
 
         return (
-          <Col style={{'height': '100px', 'textAlign': 'center'}}>
-            <h5 style={{'margin': '0%', 'marginTop': '1%', 'textAlign': 'center'}}> {input.label} </h5>
+          <Col style={{'height': '100px'}}>
+            <h5 style={{'margin': '0%', 'marginTop': '1%'}}> {number + ') ' + input.label} </h5>
             <Input style={{'width':'500px', 'marginLeft': '500px','marginBottom': '10%'}} type='select'>
               {options}
             </Input>
@@ -22,7 +22,8 @@ class Options extends React.Component {
 }
 
 Options.propTypes = {
-    input: PropTypes.object.isRequired
+    input: PropTypes.object.isRequired,
+    number: PropTypes.number.isRequired
 };
 
 export default Options;

@@ -4,7 +4,7 @@ import {Input, Col} from 'react-materialize';
 
 class CheckBox extends React.Component {
     render() {
-        const input = this.props.input;
+        const {input, number} = this.props;
         const checkBox = [];
 
         input.options.forEach((o) => {
@@ -12,8 +12,8 @@ class CheckBox extends React.Component {
         });
 
         return (
-          <Col style={{'height': '100px', 'textAlign': 'center'}}>
-            <h5 style={{'margin': '0%', 'marginTop': '1%', 'textAlign': 'center'}}> {input.label} </h5>
+          <Col style={{'height': '100px'}}>
+            <h5 style={{'margin': '0%', 'marginTop': '1%', 'marginBottom': '1%'}}> {number + ') ' + input.label} </h5>
             <div style={{'backgroundColor': 'red'}}>
               {checkBox}
             </div>
@@ -23,7 +23,8 @@ class CheckBox extends React.Component {
 }
 
 CheckBox.propTypes = {
-    input: PropTypes.object.isRequired
+    input: PropTypes.object.isRequired,
+    number: PropTypes.number.isRequired
 };
 
 export default CheckBox;

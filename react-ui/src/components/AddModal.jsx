@@ -3,6 +3,7 @@ import {Modal, Button, Icon, Input, Row} from 'react-materialize';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styles from './../stylesheets/CreateSurvey.css';
+import _ from 'lodash';
 
 import { createQuestion } from './../actions/index';
 
@@ -30,7 +31,7 @@ class AddModal extends Component{
       required:$('#required').is(':checked'),
       id: this.props.surveyId
     }
-
+    const survey = this.props.survey;
     switch(newQuestion.type){
       case 'Text':
         newQuestion.defaultValue = $('#defaultValue').val();
@@ -41,10 +42,41 @@ class AddModal extends Component{
         newQuestion.step = $('#step').val();
         break;
       case 'Likert-Scale':
+        let su = $('#supports').val();
+        if (/[a-zA-Z]/.test(su)) {
+          Materialize.toast('Error parsing support field. Remove non numerical values', 4000, 'red lighten-1');
+          return;
+        }
+        su = su.split(',');
+          su = _.sortedUniq(su);
+        let cn = $('#contradicts').val();
+        if (/[a-zA-Z]/.test(cn)) {
+          Materialize.toast('Error parsing contradict field. Remove non numerical values', 4000, 'red lighten-1');
+          return;
+        }
+        cn = cn.split(',');
+        cn = _.sortedUniq(cn);
+        let t = _.intersection(su,cn);
+        if(t.length !== 0){
+          Materialize.toast('This question cannot both support and contradict question number(s) ' + t.join(', ') + '.', 4000, 'red lighten-1');
+          return;
+        }
+        t = _.find(cn, function(c){return c > survey.questions.length});
+        if(t){
+          Materialize.toast('Cannot find question ' + t + ' in contradict field', 4000, 'red lighten-1');
+          return;
+        }
+        t = _.find(su, function(c){return c > survey.questions.length});
+        if(t){
+          Materialize.toast('Cannot find question ' + t + ' in support field', 4000, 'red lighten-1');
+          return;
+        }
+        cn = cn.map((c) => {return c * -1});
+        newQuestion.defaultValue = su + ':' + cn;
         let scale = $('#scale').val();
-        if(scale==5)
+        if(scale===5)
           $('#options').val('Strongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree');
-        else if(scale==7)
+        else if(scale===7)
           $('#options').val('Very Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree');
         else
           $('#options').val('Extremely Disagree\nVery Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree\nExtremely Agree');
@@ -102,6 +134,10 @@ class AddModal extends Component{
         $('#scale').hide();
         $('#options').attr('required',false);
         $('label[for=\'scale\']').hide();
+        $('#supports').hide();
+        $('label[for=\'supports\']').hide();
+        $('#contradicts').hide();
+        $('label[for=\'contradicts\']').hide();
         break;
       case 'Number':
         $('#minValue').show();
@@ -119,11 +155,18 @@ class AddModal extends Component{
         $('#scale').hide();
         $('#options').attr('required',false);
         $('label[for=\'scale\']').hide();
+        $('#supports').hide();
+        $('label[for=\'supports\']').hide();
+        $('#contradicts').hide();
+        $('label[for=\'contradicts\']').hide();
         break;
       case 'Likert-Scale':
         $('#scale').show();
-        $('#options').attr('required',true);
         $('label[for=\'scale\']').show();
+        $('#supports').show();
+        $('label[for=\'supports\']').show();
+        $('#contradicts').show();
+        $('label[for=\'contradicts\']').show();
         $('#minValue').hide();
         $('label[for=\'minValue\']').hide();
         $('#maxValue').hide();
@@ -153,7 +196,10 @@ class AddModal extends Component{
         $('#scale').hide();
         $('#options').attr('required',false);
         $('label[for=\'scale\']').hide();
-        break;
+        $('#supports').hide();
+        $('label[for=\'supports\']').hide();
+        $('#contradicts').hide();
+        $('label[for=\'contradicts\']').hide();
     }
 
     return(
@@ -172,6 +218,8 @@ class AddModal extends Component{
               <Input hidden type='number' s={12} id='scale' labelClassName='hidden' label='Number of Points' defaultValue='5' min='5' max='9' step='2'/>
               <Input hidden type='textarea' id='options' s={12} labelClassName='hidden' label={'Options to choose from (Separated each by pressing \'enter\')'}/>
               <Input s={12} id='defaultValue' label='Default Value'/>
+              <Input s={12} hidden id='supports' labelClassName='hidden' label={'This question support question number/s (Separate each number with using  \' , \' )'}/>
+              <Input s={12} hidden id='contradicts' labelClassName='hidden' label={'This question contradicts question number/s (Separate each number with using \' , \' )'}/>
               <Input hidden type='number' s={12} id='minValue' labelClassName='hidden' label='Minimum Value' defaultValue='0'/>
               <Input hidden type='number' s={12} id='maxValue' labelClassName='hidden' label='Maximum Value'/>
               <Input hidden type='number' s={12} id='step' labelClassName='hidden' label='Step' defaultValue='1'/>
