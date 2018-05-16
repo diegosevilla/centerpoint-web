@@ -48,13 +48,15 @@ class AddModal extends Component{
           return;
         }
         su = su.split(',');
-          su = _.sortedUniq(su);
+        su = _.compact(su);
+        su = _.sortedUniq(su);
         let cn = $('#contradicts').val();
         if (/[a-zA-Z]/.test(cn)) {
           Materialize.toast('Error parsing contradict field. Remove non numerical values', 4000, 'red lighten-1');
           return;
         }
         cn = cn.split(',');
+        cn = _.compact(cn)
         cn = _.sortedUniq(cn);
         let t = _.intersection(su,cn);
         if(cn.length != 0 && su.length != 0 && t.length !== 0){
