@@ -15,7 +15,7 @@ class Chart extends React.Component {
     };
   }
 
-  componentWillMount(){
+  componentDidMount(){
     const {question} = this.props;
     fetch('/api/answer/'+question.id)
     .then((res) => res.json())

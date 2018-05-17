@@ -136,7 +136,7 @@ class User extends Component{
               <thead>
                 <tr>
                   <th data-field="title">
-                    <Input onChange={(e)=>{this.setState({surveyName: $('#filterName').val().replace(/[^\d]/g, '')})}} id='filterName'  label='Survey Title'/>
+                    <Input onChange={(e)=>{this.setState({surveyName: $('#filterName').val()})}} id='filterName'  label='Survey Title'/>
                   </th>
                   <th data-field="id">
                     Details

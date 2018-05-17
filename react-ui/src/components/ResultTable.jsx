@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table} from 'react-materialize';
-import { ResponsivePie, ResponsiveBar,ResponsiveLine } from 'nivo';
 import _ from 'lodash';
-import Math from 'mathjs'
 import styles from '../stylesheets/CreateSurvey.css';
 
 class ResultTable extends React.Component {
@@ -12,18 +10,21 @@ class ResultTable extends React.Component {
     const header = [];
     const body = [];
 
-    header.push(<th> Response Number </th>);
+    header.push(<th key='responseNum'> Response Number </th>);
     questions.forEach((q) => {
-      header.push(<th> {q.label} </th>);
+      header.push(<th key={q.label + '-' + q.id}> {q.label} </th>);
     });
     for(let key in responses){
       let temp = [];
-      temp.push(<td> {key} </td>);
+      temp.push(<td key={'row-'+key}> {key} </td>);
       questions.forEach((q) => {
         let r = _.find(responses[key], function(r) { return r.question_id == q.id });
-        temp.push(<td> {r? r.response: 'n/a'} </td>);
+        if(r)
+          temp.push(<td key={r.id}>{r.response}</td>);
+        else
+          temp.push(<td key={q.id+'-na'}>n/a</td>);
       });
-      body.push(<tr> {temp} </tr>);
+      body.push(<tr key={key+'-row'}>{temp}</tr>);
     }
 
     return(
@@ -44,7 +45,7 @@ class ResultTable extends React.Component {
 }
 
 ResultTable.propTypes = {
-    question: PropTypes.object.isRequired,
+    questions: PropTypes.array.isRequired,
     responses: PropTypes.object.isRequired
 };
 

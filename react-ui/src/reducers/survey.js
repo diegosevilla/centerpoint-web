@@ -7,6 +7,7 @@ const initialState = {
   details: '',
   surveyId: '',
   questions: [],
+  responseCount: 0
 }
 
 const survey = (state = initialState, action) => {
@@ -18,7 +19,8 @@ const survey = (state = initialState, action) => {
             details: action.survey.details,
             surveyName: action.survey.surveyName,
             surveyId: action.survey.surveyId,
-            questions: action.survey.questions
+            questions: action.survey.questions,
+            responseCount: action.survey.responseCount
         });
       default:
          return state;

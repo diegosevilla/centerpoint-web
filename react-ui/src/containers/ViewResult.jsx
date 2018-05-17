@@ -7,6 +7,7 @@ import _ from 'lodash';
 import styles from '../stylesheets/CreateSurvey.css';
 import Chart from '../components/Chart';
 import ResultTable from '../components/ResultTable';
+import DataAnalysis from '../components/DataAnalysis';
 import { fetchSurvey } from '../actions/index';
 
 const $ = window.$;
@@ -16,7 +17,8 @@ class ViewResult extends Component{
     super(props);
     this.state = {
       isLoading: true,
-      data: [],
+      data: {},
+      responses: [],
       questions: [],
       active: 0,
       locations: [[''], [''], ['']],
@@ -51,9 +53,9 @@ class ViewResult extends Component{
               r.response += ', ' + answer.response
             }
           })
+
           let data = _.groupBy(temp, function(a){return a.responseCount});
-          console.log(data);
-          this.setState({isLoading: false, data, questions: responses.questions, locations: tempLoc });
+          this.setState({isLoading: false, data, responses: temp, questions: responses.questions, locations: tempLoc });
         })
       }
     })
@@ -61,32 +63,31 @@ class ViewResult extends Component{
 
   render() {
     const { survey } = this.props;
-    const { data, questions, isLoading } = this.state;
+    const { data, questions, isLoading, responses } = this.state;
+    let charts = [];
     let summary = [];
-    let actualResponses  = [];
 
     let sortedQuestions = _.sortBy(this.props.survey.questions, (questions) => {
          return questions.id;
      });
 
-     actualResponses.push(<ResultTable questions={sortedQuestions} responses={data}/>);
-     sortedQuestions.forEach((q) => {
-       summary.push(
-         <div style={{
-            padding: '10px',
-            width: '50%',
-            marginLeft: '25%',
-            marginRight: '25%',
-            marginTop: '2%',
-            marginBottom: '2%',
-            height: '550px',
-            backgroundColor: '#fcc2a1',
-            textAlign: 'center'
-         }} >
+    sortedQuestions.forEach((q) => {
+      charts.push(
+        <div key={q.id+'-chart'} style={{
+          padding: '10px',
+          width: '50%',
+          marginLeft: '25%',
+          marginRight: '25%',
+          marginTop: '2%',
+          marginBottom: '2%',
+          height: '550px',
+          backgroundColor: '#fcc2a1',
+          textAlign: 'center'
+        }} >
           <Chart key={q.id} question={q}/>
-         </div>
-       )
-     })
+        </div>
+      )
+    })
 
     if(isLoading)
       return(
@@ -111,14 +112,14 @@ class ViewResult extends Component{
           </div>
          <Row className="resultBody">
             <Tabs className='z-depth-1'>
-              <Tab title="Actual Responses" active>
-                {actualResponses}
+              <Tab title="Actual Responses">
+                <ResultTable key={'resultTable'} questions={sortedQuestions} responses={data}/>
               </Tab>
-              <Tab title="Summary">
-                {summary}
+              <Tab title="Charts & Graphs">
+                {charts}
               </Tab>
-              <Tab title="Data Analysis">
-                <h1> The survey is good </h1>
+              <Tab title="Data Analysis" active>
+                <DataAnalysis key={'dataAnalysis'} responseCount={survey.responseCount} questions={sortedQuestions} responses={responses}/>
               </Tab>
             </Tabs>
          </Row>
