@@ -45,13 +45,13 @@ class DataAnalysis extends React.Component {
       let question = data[key].question;
       let total = data[key].total;
       let max = data[key].max;
-
+      let percent = parseFloat(Math.round((max.count/total)*100).toFixed(2);
       switch(question.questionType){
         case 'Options':
-          summary += 'Majority (' + (max.count/total)*100 + ') of the respondents asked answered ' + max.response + ' to the question \'' + question.label + '\'.';
+          summary += 'Majority (' +  percent + ') of the respondents asked answered ' + max.response + ' to the question \'' + question.label + '\'.';
           break;
         case 'Likert-Scale':
-          summary += (max.count/total)*100 +'% ('+ max.count + ' out of ' + total + ') of the respondents answered ' + max.response.toLowerCase() + ' when asked the question ' + question.label +'.';
+          summary += percent +'% ('+ max.count + ' out of ' + total + ') of the respondents answered ' + max.response.toLowerCase() + ' when asked the question ' + question.label +'.';
           break;
         case 'Checkbox':
           summary += 'Out of ' + responseCount + ' respondents, ' + max.count + ' selected ' + max.response + ' as answer to the question ' + question.label +'.'
