@@ -16,17 +16,13 @@ class Chart extends React.Component {
   }
 
   componentDidMount(){
-    const {question} = this.props;
-    fetch('/api/answer/'+question.id)
-    .then((res) => res.json())
-    .then((answers) => {
-      let data = [];
-      let temp = _.countBy(answers, 'response');
-      for(let key in temp){
-        data.push({id: key, key: key, value: temp[key]});
-      }
-      this.setState({data:data, answers: answers});
-    })
+    const {question, chartData} = this.props;
+    let data = [];
+    let temp = _.countBy(chartData, 'response');
+    for(let key in temp){
+      data.push({id: key, key: key, value: temp[key]});
+    }
+    this.setState({data:data, answers: chartData});
   };
 
   render(){
@@ -247,6 +243,7 @@ class Chart extends React.Component {
 
 Chart.propTypes = {
     question: PropTypes.object.isRequired,
+    chartData: PropTypes.array.isRequired
 };
 
 export default Chart;

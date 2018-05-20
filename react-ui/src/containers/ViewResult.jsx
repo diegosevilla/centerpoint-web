@@ -55,7 +55,7 @@ class ViewResult extends Component{
           })
 
           let data = _.groupBy(temp, function(a){return a.responseCount});
-          this.setState({isLoading: false, data, responses: temp, questions: responses.questions, locations: tempLoc });
+          this.setState({isLoading: false, data, responses: tempAnswers, questions: responses.questions, locations: tempLoc });
         })
       }
     })
@@ -72,6 +72,7 @@ class ViewResult extends Component{
      });
 
     sortedQuestions.forEach((q) => {
+      let chartData = _.filter(responses, ['question_id', q.id]);
       charts.push(
         <div key={q.id+'-chart'} style={{
           padding: '10px',
@@ -84,7 +85,7 @@ class ViewResult extends Component{
           backgroundColor: '#fcc2a1',
           textAlign: 'center'
         }} >
-          <Chart key={q.id} question={q}/>
+          <Chart key={q.id} question={q} chartData={chartData}/>
         </div>
       )
     })
@@ -112,13 +113,13 @@ class ViewResult extends Component{
           </div>
          <Row className="resultBody">
             <Tabs className='z-depth-1'>
-              <Tab title="Actual Responses">
+              <Tab title="Actual Responses" active>
                 <ResultTable key={'resultTable'} questions={sortedQuestions} responses={data}/>
               </Tab>
               <Tab title="Charts & Graphs">
                 {charts}
               </Tab>
-              <Tab title="Data Analysis" active>
+              <Tab title="Data Analysis">
                 <DataAnalysis key={'dataAnalysis'} responseCount={survey.responseCount} questions={sortedQuestions} responses={responses}/>
               </Tab>
             </Tabs>

@@ -15,7 +15,7 @@ module.exports= {
   },
 
   findOne: function(req, res, next){
-    Survey.find({ where: {id:req.params.id}, include: [Question]})
+    Survey.find({ where: {id:req.params.id}, include: [Question], order: [[Question, 'id']]})
     .then((survey) => {
       if(!survey) res.status(404).send({id:-1});
       else {

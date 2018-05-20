@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Table} from 'react-materialize';
 import _ from 'lodash';
+import * as Sentiment from 'sentiment';
+
 import styles from '../stylesheets/CreateSurvey.css';
 
 class DataAnalysis extends React.Component {
@@ -39,13 +41,18 @@ class DataAnalysis extends React.Component {
     const {data} = this.state;
     const {responseCount} = this.props;
     let analysis = [];
+    let sentiment = new Sentiment();
 
     for(let key in data){
       let summary = '';
       let question = data[key].question;
       let total = data[key].total;
       let max = data[key].max;
-      let percent = parseFloat(Math.round((max.count/total)*100)).toFixed(2);
+      let percent = parseFloat((max.count/total)*100).toFixed(2);
+      var result = sentiment.analyze(question.label);
+      console.dir(question.label + ': ' + JSON.stringify(result));    // Score: -2, Comparative: -0.666
+      var result = sentiment.analyze(max.response);
+      console.dir(max.response + ': ' + JSON.stringify(result));    // Score: -2, Comparative: -0.666
       switch(question.questionType){
         case 'Options':
           summary += 'Majority (' +  percent + ') of the respondents asked answered ' + max.response + ' to the question \'' + question.label + '\'.';

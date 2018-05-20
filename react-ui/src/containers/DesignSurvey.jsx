@@ -78,12 +78,8 @@ class CreateSurvey extends Component{
     const { survey } = this.props;
     let  inputs = [];
 
-    let sortedQuestions = _.sortBy(this.props.survey.questions, (questions) => {
-         return questions.id;
-     });
-
     let i = 1;
-    sortedQuestions.forEach((input) => {
+    survey.questions.forEach((input) => {
       let newQuestion = null;
       switch(input.questionType){
         case 'Text': newQuestion = <TextField key={input.id} input={input} number={i}/>; break;
@@ -126,9 +122,9 @@ class CreateSurvey extends Component{
             <br/><br/>
             <Row>
               <div className="survTitle center">
-                <h3> {survey.surveyName} </h3>
-                <h5> By: {survey.author} </h5>
-                <h5> {survey.details} </h5>
+                <h4> {survey.surveyName} </h4>
+                <h6> By: {survey.author} </h6>
+                <h6> {survey.details} </h6>
               </div>
               <Modal id='editSurvey' header='Edit Survey Details' trigger={<Button className="btnEditTitle blue-grey dark-1"><Icon> edit </Icon> Edit Survey Details </Button>}>
                 <form onSubmit={(e) => this.editSurvey(e) }>
@@ -137,7 +133,7 @@ class CreateSurvey extends Component{
                   <Input className='btn blue-grey darken-1' type='submit'/>
                 </form>
               </Modal>
-              <AddModal surveyId={survey.id+''}/>
+              <AddModal/>
               <Button className="btnCancel red dark-1" onClick={(e) => this.cancel(e)}> <Icon> cancel </Icon> Delete Survey </Button>
             </Row>
           </div>
