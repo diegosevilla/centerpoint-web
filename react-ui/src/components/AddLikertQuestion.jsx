@@ -65,15 +65,7 @@ class AddLikertQuestion extends Component{
         this.setState({contradict: _.without(this.state.contradict, num+'')});
     }
   }
-
-  find(ar, i){
-    let val = false;
-    ar.forEach((a) => {
-      if(a == i) val = true;
-    })
-    return val;
-  }
-
+  
   changeState(attr, id){
     if(attr == 'type')
       this.setState({type: $(id).val()});
@@ -137,7 +129,7 @@ class AddLikertQuestion extends Component{
 
     return(
       <Row>
-        <Input id={'likertType'+id} s={12}  onChange={ (e) => this.changeState('type', '#likertType'+id)} type='select' label='Type' value={type}>
+        <Input id={'likertType'+id} s={12}  onChange={ (e) => this.changeState('type', '#likertType'+id)} type='select' label='Likert Scale Type' value={type}>
           <option value='Agreement'>Agreement</option>
           <option value='Frequency'>Frequency</option>
           <option value='Satisfaction'>Satisfaction</option>
@@ -159,7 +151,7 @@ class AddLikertQuestion extends Component{
           {cn}
         </Row>
         <Row>
-          <Input hidden type='textarea' id={'options'+id} s={12} label={'Options'} value={value}/>
+          <Input hidden type='textarea' id={'options'+id} value={value}/>
           <Input hidden id={'supports'+id} value={support.join(',')}/>
           <Input hidden id={'contradicts'+id} value={contradict.join(',')}/>
         </Row>

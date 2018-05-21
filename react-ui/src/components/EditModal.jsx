@@ -9,6 +9,7 @@ import AddLikertQuestion from './AddLikertQuestion';
 import AddTextQuestion from './AddTextQuestion';
 import AddNumberQuestion from './AddNumberQuestion';
 import AddDefaultQuestion from './AddDefaultQuestion';
+import AddDemographicQuestion from './AddDemographicQuestion';
 
 const $ = window.$;
 const Materialize = window.Materialize;
@@ -33,6 +34,20 @@ class EditModal extends Component{
           editedEntry.maxVal = $('#maxValue-'+input.id).val();
           editedEntry.step = $('#step-'+input.id).val();
           break;
+        case 'Demographic':
+          editedEntry.defaultValue = $('#demographic-'+input.id).val();
+          if(editedEntry.defaultValue == 'Age'){
+            editedEntry.minVal = $('#minAge-'+input.id).val();
+            editedEntry.maxVal = $('#maxAge-'+input.id).val();
+            editedEntry.step = $('#interval-'+input.id).val();
+          }
+          let options =  $('#options-'+input.id).val().split('\n');
+          if(options.length == 1){
+            Materialize.toast('Cannot add '+ editedEntry.type + ' - ' + editedEntry.defaultValue + ' question with only one option to choose from.', 4000, 'red lighten-1');
+            return
+          }
+          editedEntry.options = options.join('&options=');
+          break;
         case 'Likert-Scale':
           let su = $('#supports-'+input.id).val();
           su =  _.compact(su.split(','));
@@ -40,7 +55,7 @@ class EditModal extends Component{
           cn = _.compact(cn.split(','))
           editedEntry.defaultValue = su + ':' + cn + ':' + $('#likertType-'+input.id).val();
         default:
-          let options =  $('#options-'+input.id).val().split('\n');
+          options =  $('#options-'+input.id).val().split('\n');
           if(options.length == 1){
             Materialize.toast('Cannot add '+ input.questionType + ' question with only one option to choose from.', 4000, 'red lighten-1');
             return
@@ -70,6 +85,9 @@ class EditModal extends Component{
           form.push(<Input type='number' s={12} key={'minValue-'+input.id} id={'minValue-'+input.id} label='Minimum Value' defaultValue={input.minValue}/>);
           form.push(<Input type='number' s={12} key={'maxValue-'+input.id} id={'maxValue-'+input.id} label='Maximum Value' defaultValue={input.maxValue}/>);
           form.push(<Input type='number' s={12} key={'step-'+input.id} id={'step-'+input.id} label='Step' defaultValue={input.step}/>);
+          break;
+        case 'Demographic':
+          form.push(<AddDemographicQuestion question={input}/>);
           break;
         case 'Likert-Scale':
           form.push(<AddLikertQuestion question={input} survey={survey}/>);

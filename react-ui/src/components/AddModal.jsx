@@ -8,9 +8,11 @@ import _ from 'lodash';
 import { createQuestion } from './../actions/index';
 
 import AddLikertQuestion from './AddLikertQuestion';
+import AddDemographicQuestion from './AddDemographicQuestion';
 import AddTextQuestion from './AddTextQuestion';
 import AddNumberQuestion from './AddNumberQuestion';
 import AddDefaultQuestion from './AddDefaultQuestion';
+
 const $ = window.$;
 const Materialize = window.Materialize;
 
@@ -24,6 +26,14 @@ class AddModal extends Component{
 
   componentDidMount(){
     this.setState({type:'Text'});
+  }
+
+  componentDidUpdate(){
+    $('#label').val('');
+    $('#label').change();
+    if(this.state.type == 'Demographic'){
+      $('#required').prop('checked', true);
+    }
   }
 
   add(e) {
@@ -44,6 +54,20 @@ class AddModal extends Component{
         newQuestion.maxVal = $('#maxValue').val();
         newQuestion.step = $('#step').val();
         break;
+      case 'Demographic':
+        newQuestion.defaultValue = $('#demographic').val();
+        if(newQuestion.defaultValue == 'Age'){
+          newQuestion.minVal = $('#minAge').val();
+          newQuestion.maxVal = $('#maxAge').val();
+          newQuestion.step = $('#interval').val();
+        }
+        let options =  $('#options').val().split('\n');
+        if(options.length == 1){
+          Materialize.toast('Cannot add '+ newQuestion.type + ' - ' + newQuestion.defaultValue + ' question with only one option to choose from.', 4000, 'red lighten-1');
+          return
+        }
+        newQuestion.options = options.join('&options=');
+        break;
       case 'Likert-Scale':
         let su = $('#supports').val();
         su =  _.compact(su.split(','));
@@ -51,12 +75,13 @@ class AddModal extends Component{
         cn = _.compact(cn.split(','))
         newQuestion.defaultValue = su + ':' + cn + ':' + $('#likertType').val();
       default:
-        let options =  $('#options').val().split('\n');
+        options =  $('#options').val().split('\n');
         if(options.length == 1){
           Materialize.toast('Cannot add '+ newQuestion.type + ' question with only one option to choose from.', 4000, 'red lighten-1');
           return
         }
         newQuestion.options = options.join('&options=');
+        break;
     }
     this.props.createQuestion(newQuestion)
     .then(() => {
@@ -82,9 +107,11 @@ class AddModal extends Component{
       case 'Number':
         form.push(<AddNumberQuestion survey={this.props.survey}/>);
         break;
+      case 'Demographic':
+        form.push(<AddDemographicQuestion survey={this.props.survey}/>);
+        break;
       case 'Likert-Scale':
-
-        form.push(<AddLikertQuestion survey={this.props.survey} question={null}/>);
+        form.push(<AddLikertQuestion survey={this.props.survey}/>);
         break;
       default:
         form.push(<AddDefaultQuestion survey={this.props.survey}/>);
@@ -103,7 +130,7 @@ class AddModal extends Component{
                 <option value='Likert-Scale'>Likert Scale</option>
                 <option value='Demographic'>Demographic</option>
               </Input>
-              <Input id='required' type='checkbox' checked={true} label='Is this question required?'/>
+              <Input id='required' type='checkbox' label='Is this question required?'/>
           </Row>
           {form}
           <Row>
