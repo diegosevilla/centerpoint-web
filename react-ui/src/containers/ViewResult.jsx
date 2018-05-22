@@ -126,8 +126,8 @@ class ViewResult extends Component{
             start = 0;
             end = d.minVal;
           } else if(temp.startsWith('Above')){
-            start = d.maxVal+1;
-            end = Math.max();
+            start = d.maxVal;
+            end = Math.abs(Math.max());
           } else {
             let str = temp.split(' - ');
             start = parseInt(str[0]);
