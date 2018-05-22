@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
-import {Input, Row, Button} from 'react-materialize';
+import {Input, Row, Button } from 'react-materialize';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
 const $ = window.$;
+const Materialize = window.Materialize;
 
 export class AgeForm extends React.Component {
   constructor(props) {
@@ -79,6 +80,13 @@ export class GenderForm extends React.Component {
     };
   }
 
+  componentDidMount(){
+    const {question} = this.props;
+    if(question){
+      this.setState({value: question.options});
+    }
+  }
+
   delete(e,v){
     e.preventDefault();
     const {value} = this.state;
@@ -89,6 +97,10 @@ export class GenderForm extends React.Component {
     const {value} = this.state;
 
     let newVal = $('#gender'+id).val();
+    if(newVal == ''){
+      Materialize.toast('Please Enter value', 'red-lighten 1', '4000');
+      return;
+    }
     $('#gender'+id).val('');
     this.setState({value: _.concat(value, [newVal])});
   }
@@ -108,7 +120,8 @@ export class GenderForm extends React.Component {
           {value.map((v) => {
             return (
               <Row>
-                {v} <Button type='button' onClick={(e) => this.delete(e, v)}floating small className='red' waves='light' icon='delete' />
+                {v}
+                <Button className='btn-mini' type='button' onClick={(e) => this.delete(e, v)}floating small className='red' waves='light' icon='delete' />
               </Row>
             )
           })}

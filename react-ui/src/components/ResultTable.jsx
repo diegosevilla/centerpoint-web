@@ -14,18 +14,19 @@ class ResultTable extends React.Component {
     questions.forEach((q) => {
       header.push(<th key={q.label + '-' + q.id}> {q.label} </th>);
     });
-    for(let key in responses){
+
+    responses.forEach((response) => {
       let temp = [];
-      temp.push(<td key={'row-'+key}> {key} </td>);
+      temp.push(<td key={'row-'+response.responseCount}> {response.responseCount} </td>);
       questions.forEach((q) => {
-        let r = _.find(responses[key], function(r) { return r.question_id == q.id });
+        let r = response[q.id];
         if(r)
-          temp.push(<td key={r.id}>{r.response}</td>);
+          temp.push(<td key={q.id+'-'+response.responseCount}>{r.join(', ')}</td>);
         else
           temp.push(<td key={q.id+'-na'}>n/a</td>);
       });
-      body.push(<tr key={key+'-row'}>{temp}</tr>);
-    }
+      body.push(<tr key={response.responseCount+'-row'}>{temp}</tr>);
+    })
 
     return(
       <div style={{backgroundColor: 'white', height: 500, padding: 10}}>
@@ -46,7 +47,7 @@ class ResultTable extends React.Component {
 
 ResultTable.propTypes = {
     questions: PropTypes.array.isRequired,
-    responses: PropTypes.object.isRequired
+    responses: PropTypes.array.isRequired
 };
 
 export default ResultTable;

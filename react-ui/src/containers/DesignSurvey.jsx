@@ -85,7 +85,11 @@ class CreateSurvey extends Component{
         case 'Text': newQuestion = <TextField key={input.id} input={input} number={i}/>; break;
         case 'Number': newQuestion = <NumberField key={input.id} input={input} number={i}/>; break;
         case 'Checkbox': newQuestion = <CheckBox key={input.id} input={input} number={i}/>;break;
-        default: newQuestion = <Options key={input.id} input={input} number={i}/>;
+        default:
+          if(input.defaultValue != 'Age')
+            newQuestion = <Options key={input.id} input={input} number={i}/>;
+          else
+            newQuestion = <NumberField key={input.id} input={input} number={i} step={1}/>;
       }
       inputs.push(
         <Row key={input.id} style={{'marginTop': '1%', 'width': '50%'}}>

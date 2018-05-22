@@ -20,9 +20,10 @@ class ViewResult extends Component{
       data: {},
       responses: [],
       questions: [],
-      active: 0,
+      active: '0',
       locations: [[''], [''], ['']],
-      filter: {0: '', 1: '', 2: ''}
+      filter: {},
+      demography: {}
     };
   }
 
@@ -47,32 +48,107 @@ class ViewResult extends Component{
                 tempLoc[i].push(loc[i]);
             }
             let r = _.find(temp, {responseCount: answer.responseCount, question_id: answer.question_id});
-            if(!r)
+            if(!r){
+              answer.response = [answer.response];
               temp.push(answer);
+            }
             else{
-              r.response += ', ' + answer.response
+              r.response = _.concat(r.response, [answer.response]);
             }
           })
+          let demo = _.filter(this.props.survey.questions, function(q){return q.questionType == 'Demographic';});
+          let demography = {};
+
+          demo.forEach((d) => { demography[d.id] = '' });
 
           let data = _.groupBy(temp, function(a){return a.responseCount});
-          this.setState({isLoading: false, data, responses: tempAnswers, questions: responses.questions, locations: tempLoc });
+          this.setState({isLoading: false, data, responses: tempAnswers, questions: responses.questions, locations: tempLoc, demography: demography });
         })
       }
     })
   }
 
+  changeDemography(e, demo){
+    e.preventDefault();
+    let demography = {};
+
+    demo.forEach((d) => {
+      demography[d.id] = $('#filter-'+d.defaultValue).val();
+    });
+
+    this.setState({demography: demography});
+  }
+
   render() {
     const { survey } = this.props;
-    const { data, questions, isLoading, responses } = this.state;
+    const { data, questions, isLoading, responses, demography, active} = this.state;
     let charts = [];
     let summary = [];
+    let filter = [];
 
-    let sortedQuestions = _.sortBy(this.props.survey.questions, (questions) => {
-         return questions.id;
-     });
+    let sortedQuestions = _.sortBy(this.props.survey.questions, (questions) => { return questions.id; });
+
+    let demo = _.filter(sortedQuestions, (q) => {return q.questionType == 'Demographic';});
+
+    demo.forEach((d) => {
+      let temp = [];
+      temp.push(<option value=''> </option>);
+      d.options.forEach((o) => {
+        temp.push(<option value={o}>{o}</option>);
+      })
+
+      filter.push(
+        <Input s={3} required='true' onChange={(e) => this.changeDemography(e,demo)} id={'filter-'+ d.defaultValue} type='select' label={d.defaultValue} defaultValue='--'>
+          {temp}
+        </Input>
+      );
+    });
+
+    let res = [];
+    for(let key in data){
+      let temp = data[key];
+      let r = {};
+      r.responseCount = key;
+      r.location = temp[0].location;
+      temp.forEach((t) => {
+        r[t.question_id] = t.response;
+      })
+      res.push(r);
+    }
+
+    let filteredRes = _.filter(res, (r) => {
+      for(let i = 0 ; i< demo.length ; i++){
+        let d = demo[i];
+        if(demography[d.id] == '') continue;
+        if(d.defaultValue == 'Age'){
+          let start, end, temp = demography[d.id];
+          if(temp.startsWith('Below')){
+            start = 0;
+            end = d.minVal;
+          } else if(temp.startsWith('Above')){
+            start = d.maxVal+1;
+            end = Math.max();
+          } else {
+            let str = temp.split(' - ');
+            start = parseInt(str[0]);
+            end = parseInt(str[1])+1;
+          }
+          return (_.inRange(r[d.id], start, end));
+        } else if(r[d.id] != demography[d.id]) return false;
+      }
+      return true;
+    })
 
     sortedQuestions.forEach((q) => {
-      let chartData = _.filter(responses, ['question_id', q.id]);
+      let chartData = [];
+      filteredRes.forEach((response) => {
+        let res = response[q.id];
+        res.forEach((r) => {
+          chartData.push({response: r})
+        });
+      });
+
+      chartData = _.filter(chartData, function(data){ return chartData });
       charts.push(
         <div key={q.id+'-chart'} style={{
           padding: '10px',
@@ -88,7 +164,7 @@ class ViewResult extends Component{
           <Chart key={q.id} question={q} chartData={chartData}/>
         </div>
       )
-    })
+    });
 
     if(isLoading)
       return(
@@ -112,15 +188,19 @@ class ViewResult extends Component{
               </div>
           </div>
          <Row className="resultBody">
-            <Tabs className='z-depth-1'>
-              <Tab title="Actual Responses" active>
-                <ResultTable key={'resultTable'} questions={sortedQuestions} responses={data}/>
+           <Row style={{paddingLeft: 50, paddingTop: 10}}>
+           <h6> Filter By: </h6>
+           {filter}
+           </Row>
+            <Tabs className='z-depth-1' onChange={(e) =>{this.setState({active: e+''})}}>
+              <Tab title="Actual Responses" active={active.endsWith('0')}>
+                <ResultTable key={'resultTable'} questions={sortedQuestions} responses={filteredRes}/>
               </Tab>
-              <Tab title="Charts & Graphs">
+              <Tab title="Charts & Graphs" active={active.endsWith('1')}>
                 {charts}
               </Tab>
-              <Tab title="Data Analysis">
-                <DataAnalysis key={'dataAnalysis'} responseCount={survey.responseCount} questions={sortedQuestions} responses={responses}/>
+              <Tab title="Data Analysis" active={active.endsWith('2')}>
+                <DataAnalysis key={'dataAnalysis'} responseCount={survey.responseCount} questions={sortedQuestions} responses={filteredRes}/>
               </Tab>
             </Tabs>
          </Row>

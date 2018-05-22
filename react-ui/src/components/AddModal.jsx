@@ -62,8 +62,13 @@ class AddModal extends Component{
           newQuestion.step = $('#interval').val();
         }
         let options =  $('#options').val().split('\n');
-        if(options.length == 1){
-          Materialize.toast('Cannot add '+ newQuestion.type + ' - ' + newQuestion.defaultValue + ' question with only one option to choose from.', 4000, 'red lighten-1');
+
+        if(options == 'Error setting options'){
+          Materialize.toast('Error adding '+ newQuestion.type + ' - ' + newQuestion.defaultValue + '.', 4000, 'red lighten-1');
+          return
+        }
+        if(options.length <= 1){
+          Materialize.toast('Cannot add '+ newQuestion.type + ' - ' + newQuestion.defaultValue + ' question with ' + options.length + ' option to choose from.', 4000, 'red lighten-1');
           return
         }
         newQuestion.options = options.join('&options=');
