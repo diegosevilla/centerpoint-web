@@ -35,8 +35,7 @@ class DataAnalysis extends React.Component {
       let temp = {
         question: question,
         responses: r,
-        max: _.maxBy(r, function(t){return t.count}),
-        total: _.sumBy(r, function(t){return t.count})
+        max: _.maxBy(r, function(t){return t.count})
       }
       data.push(temp);
     });
@@ -54,9 +53,9 @@ class DataAnalysis extends React.Component {
       let d = data[i];
       let summary = '';
       let question = d.question;
-      let total = responseCount
+      let total = responses.length;
       let max = d.max;
-      if(d.total == 0) continue;
+      if(total == 0) continue;
       let percent = parseFloat((max.count/total)*100).toFixed(2);
 
       switch(question.questionType){
@@ -67,7 +66,7 @@ class DataAnalysis extends React.Component {
           summary += percent +'% ('+ max.count + ' out of ' + total + ') of the respondents answered ' + max.response + ' when asked the question ' + question.label +'.';
           break;
         case 'Checkbox':
-          summary += 'Out of ' + total  + ' respondents, ' + max.count + ' selected ' + max.response + ' as answer to the question ' + question.label +'.'
+          summary += 'Out of ' + responses.length  + ' respondents, ' + max.count + ' selected ' + max.response + ' as answer to the question ' + question.label +'.'
           break;
         case 'Number':
           summary += 'this type of '
