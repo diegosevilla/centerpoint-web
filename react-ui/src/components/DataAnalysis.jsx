@@ -44,7 +44,7 @@ class DataAnalysis extends React.Component {
 
   render(){
     const {data} = this.state;
-    const {responseCount} = this.props;
+    const {responses} = this.props;
     let analysis = [];
     let sentiment = new Sentiment();
 
