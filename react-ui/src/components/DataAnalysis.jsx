@@ -22,7 +22,7 @@ class DataAnalysis extends React.Component {
       responses.forEach((response) => {
         let res = response[question.id];
         res.forEach((r) => {
-            group.push({response: r});
+          group.push({response: r});
         })
       });
 
