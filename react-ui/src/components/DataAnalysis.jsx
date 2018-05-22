@@ -49,6 +49,7 @@ class DataAnalysis extends React.Component {
     let analysis = [];
     let sentiment = new Sentiment();
 
+    console.log(data);
     for(let i = 0 ; i < data.length ; i++){
       let d = data[i];
       let summary = '';
@@ -63,7 +64,7 @@ class DataAnalysis extends React.Component {
           summary += 'Majority (' +  percent + ') of the respondents asked answered ' + max.response + ' to the question \'' + question.label + '\'.';
           break;
         case 'Likert-Scale':
-          summary += percent +'% ('+ max.count + ' out of ' + total + ') of the respondents answered ' + max.response.toLowerCase() + ' when asked the question ' + question.label +'.';
+          summary += percent +'% ('+ max.count + ' out of ' + total + ') of the respondents answered ' + max.response + ' when asked the question ' + question.label +'.';
           break;
         case 'Checkbox':
           summary += 'Out of ' + total  + ' respondents, ' + max.count + ' selected ' + max.response + ' as answer to the question ' + question.label +'.'
@@ -74,7 +75,6 @@ class DataAnalysis extends React.Component {
         default: break;
       }
       analysis.push(<p> {summary} </p>)
-
     };
 
     return(

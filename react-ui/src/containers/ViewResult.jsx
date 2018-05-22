@@ -139,8 +139,6 @@ class ViewResult extends Component{
       return true;
     })
 
-    console.log(filteredRes);
-
     sortedQuestions.forEach((q) => {
       let chartData = [];
       filteredRes.forEach((response) => {
@@ -202,7 +200,7 @@ class ViewResult extends Component{
                 {charts}
               </Tab>
               <Tab title="Data Analysis" active={active.endsWith('2')}>
-                <DataAnalysis key={'dataAnalysis'} responseCount={survey.responseCount} questions={sortedQuestions} responses={filteredRes}/>
+                <DataAnalysis key={'dataAnalysis'} responseCount={survey.responseCount} questions={sortedQuestions} responses={filteredRes} demography={demography}/>
               </Tab>
             </Tabs>
          </Row>
