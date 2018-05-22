@@ -49,16 +49,16 @@ class DataAnalysis extends React.Component {
     let sentiment = new Sentiment();
 
     let parameters = '';
-    for(let key in demography){
-      if(demography[key] == '') continue;
-      let question = _.find(questions, {id: key});
-      if(!question)
-      if(parameters == '')
-        parameters += 'Given the parameters ';
-      parameters+= question.defaultValue + ' is ' + demography[key] + ', ';
-    }
-    if(parameters.endsWith(','))
-      parameters +=  ' the following results can be observed:'
+    // for(let key in demography){
+    //   if(demography[key] == '') continue;
+    //   let question = _.find(questions, {id: key});
+    //   if(!question)
+    //   if(parameters == '')
+    //     parameters += 'Given the parameters ';
+    //   parameters+= question.defaultValue + ' is ' + demography[key] + ', ';
+    // }
+    // if(parameters.endsWith(','))
+    //   parameters +=  ' the following results can be observed:'
 
     for(let i = 0 ; i < data.length ; i++){
       let d = data[i];
