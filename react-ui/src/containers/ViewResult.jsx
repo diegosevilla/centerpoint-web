@@ -98,7 +98,7 @@ class ViewResult extends Component{
       })
 
       filter.push(
-        <Input s={3} required='true' onChange={(e) => this.changeDemography(e,demo)} id={'filter-'+ d.defaultValue} type='select' label={d.defaultValue} defaultValue='--'>
+        <Input s={3} required='true' onChange={(e) => this.changeDemography(e,demo)} id={'filter-'+ d.defaultValue} type='select' label={d.defaultValue} defaultValue=''>
           {temp}
         </Input>
       );
@@ -117,7 +117,7 @@ class ViewResult extends Component{
     }
 
     let filteredRes = _.filter(res, (r) => {
-      for(let i = 0 ; i< demo.length ; i++){
+      for(let i = 0 ; i < demo.length ; i++){
         let d = demo[i];
         if(demography[d.id] == '') continue;
         if(d.defaultValue == 'Age'){
@@ -133,11 +133,13 @@ class ViewResult extends Component{
             start = parseInt(str[0]);
             end = parseInt(str[1])+1;
           }
-          return (_.inRange(r[d.id], start, end));
+          if(!_.inRange(r[d.id], start, end)) return false;
         } else if(r[d.id] != demography[d.id]) return false;
       }
       return true;
     })
+
+    console.log(filteredRes);
 
     sortedQuestions.forEach((q) => {
       let chartData = [];
