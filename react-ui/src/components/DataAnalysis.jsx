@@ -51,7 +51,8 @@ class DataAnalysis extends React.Component {
     let parameters = '';
     for(let key in demography){
       if(demography[key] == '') continue;
-      let question = _.find(questions, ['id', key]);
+      let question = _.find(questions, {id: key});
+      if(!question)
       if(parameters == '')
         parameters += 'Given the parameters ';
       parameters+= question.defaultValue + ' is ' + demography[key] + ', ';
