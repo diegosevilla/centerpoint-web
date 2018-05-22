@@ -44,11 +44,21 @@ class DataAnalysis extends React.Component {
 
   render(){
     const {data} = this.state;
-    const {responses} = this.props;
+    const {responses, demography, questions} = this.props;
     let analysis = [];
     let sentiment = new Sentiment();
 
-    console.log(data);
+    let parameters = '';
+    for(let key in demography){
+      if(demography[key] == '') continue;
+      let question = _.find(question, ['id', key]);
+      if(parameters == '')
+        parameters += 'Given the parameters ';
+      parameters+= question.defaultValue + ' is ' + demography[key] + ', ';
+    }
+    if(parameters.endsWith(','))
+      parameters +=  ' the following results can be observed:'
+
     for(let i = 0 ; i < data.length ; i++){
       let d = data[i];
       let summary = '';
@@ -69,7 +79,7 @@ class DataAnalysis extends React.Component {
           summary += 'Out of ' + responses.length  + ' respondents, ' + max.count + ' selected ' + max.response + ' as answer to the question ' + question.label +'.'
           break;
         case 'Number':
-          summary += 'this type of '
+          summary += 'this type of ';
           break;
         default: break;
       }
@@ -78,6 +88,7 @@ class DataAnalysis extends React.Component {
 
     return(
       <div style={{width: '80%',height: 500, padding: 30, marginLeft: '10%', marginRight: '10%'}}>
+        <h6> {parameters} </h6>
         {analysis}
       </div>
     )
@@ -87,7 +98,8 @@ class DataAnalysis extends React.Component {
 DataAnalysis.propTypes = {
     responseCount: PropTypes.number.isRequired,
     questions: PropTypes.array.isRequired,
-    responses: PropTypes.array.isRequired
+    responses: PropTypes.array.isRequired,
+    demography: PropTypes.object
 };
 
 export default DataAnalysis;
