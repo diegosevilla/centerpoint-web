@@ -65,7 +65,7 @@ class AddLikertQuestion extends Component{
         this.setState({contradict: _.without(this.state.contradict, num+'')});
     }
   }
-  
+
   changeState(attr, id){
     if(attr == 'type')
       this.setState({type: $(id).val()});
@@ -85,35 +85,35 @@ class AddLikertQuestion extends Component{
     switch(type){
       case 'Agreement':
         if(scale==5)
-          value = 'Strongly Agree\nAgree\nNeither agree nor disagree\nDisagree\nStrongly Disagree';
+          value = 'Strongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree';
         else if(scale==7)
-          value = 'Very Strongly Agree\nStrongly Agree\nAgree\nNeither agree nor disagree\nDisagree\nStrongly Disagree\nVery Strongly Disagree';
+          value = 'Very Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree';
         else
-          value = 'Extremely Agree\nVery Strongly Agree\nStrongly Agree\nAgree\nNeither agree nor disagree\nDisagree\nStrongly Disagree\nVery Strongly Disagree\nExtremely Disagree';
+          value = 'Extremely Disagree\nVery Strongly Disagree\nStrongly Disagree\nDisagree\nNeither agree nor disagree\nAgree\nStrongly Agree\nVery Strongly Agree\nExtremely Agree';
         break;
       case 'Frequency':
         if(scale==5)
-          value = 'Every Time\nAlmost Every Time\nOccasionally\nAlmost Never\nNever';
+          value = 'Never\nAlmost Never\nOccasionally\nAlmost Everytime\nEverytime';
         else if(scale==7)
-          value = 'Every Time\nUsually\nFrequently\nOccasionally\nSometimes\nRarely\nNever';
+          value = 'Never\nRarely\nSometimes\nOccasionally\nFrequently\nUsally\nEverytime';
         else
-          value = 'Every Time\nAlmost Every Time\nUsually\nFrequently\nOccasionally\nSometimes\nRarely\nAlmost Never\nNever';
+          value = 'Never\nAlmost Never\nRarely\nSometimes\nOccasionally\nFrequently\nUsally\nAlmost Everytime\nEverytime';
         break;
       case 'Satisfaction':
         if(scale==5)
-          value = 'Satisfied\nSlightly Satisfied\nNeutral\nSlightly Unsatisfied\nUnsatisfied';
+          value = 'Unsatisfied\nSlightly Unsatisfied\nNeutral\nSlightly Satisfied\nSatisfied';
         else if(scale==7)
-          value = 'Highly Satisfied\nSatisfied\nSlightly Satisfied\nNeutral\nSlightly Unsatisfied\nUnsatisfied\nHighly Unsatisfied';
+          value = 'Highly Unsatisfied\nUnsatisfied\nSlightly Unsatisfied\nNeutral\nSlightly Satisfied\nSatisfied\nHighly Satisfied';
         else
-          value = 'Extremely Satisfied\nHighly Satisfied\nSatisfied\nSlightly Satisfied\nNeutral\nSlightly Unsatisfied\nUnsatisfied\nHighly Unsatisfied\nExtremely Unsatisfied';
+          value = 'Extremely Unsatisfied\nHighly Unsatisfied\nUnsatisfied\nSlightly Unsatisfd\nNeutral\nSlightly Satisfied\nSatisfied\nHighly Satisfied\nExtremely Satisfied';
         break;
       default:
         if(scale==5)
-          value = 'Important\nSlightly Important\nNeutral\nSlightly Not Important\nNot Important';
+          value = 'Not Important\nSlightly Not Important\nNeutral\nSlightly Important\nImportant';
         else if(scale==7)
-          value = 'Highly Important\nImportant\nSlightly Important\nNeutral\nSlightly Not Impotant\nNot Important\nHighly Not Important';
+          value = 'Highly Not Important\nNot Important\nSlightly Not Important\nNeutral\nSlightly Important\nImportant\nHighly Important';
         else
-          value = 'Extremely Important\nHighly Important\nImportant\nSlightly Important\nNeutral\nSlightly Not Impotant\nNot Important\nHighly Not Important\nExtremely Not Important';
+          value = 'Extremely Not Important\nHighly Not Important\nNot Important\nSlightly Not Important\nNeutral\nSlightly Important\nImportant\nHighly Important\nExtremely Important';
     }
 
     su.push(<h6> This question supports question number(s): </h6>)

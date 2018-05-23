@@ -92,13 +92,13 @@ class ViewResult extends Component{
 
     demo.forEach((d) => {
       let temp = [];
-      temp.push(<option value=''> </option>);
+      temp.push(<option key={'null-'+d.id} value=''> </option>);
       d.options.forEach((o) => {
-        temp.push(<option value={o}>{o}</option>);
+        temp.push(<option key={o+'-'+d.id} value={o}>{o}</option>);
       })
 
       filter.push(
-        <Input s={3} required='true' onChange={(e) => this.changeDemography(e,demo)} id={'filter-'+ d.defaultValue} type='select' label={d.defaultValue} defaultValue=''>
+        <Input s={3} key={'input-'+d.id} required='true' onChange={(e) => this.changeDemography(e,demo)} id={'filter-'+ d.defaultValue} type='select' label={d.defaultValue} defaultValue=''>
           {temp}
         </Input>
       );
@@ -143,27 +143,30 @@ class ViewResult extends Component{
       let chartData = [];
       filteredRes.forEach((response) => {
         let res = response[q.id];
-        res.forEach((r) => {
-          chartData.push({response: r})
-        });
+        if(res){
+          res.forEach((r) => {
+            chartData.push({response: r})
+          });
+        }
       });
-
-      chartData = _.filter(chartData, function(data){ return chartData });
-      charts.push(
-        <div key={q.id+'-chart'} style={{
-          padding: '10px',
-          width: '50%',
-          marginLeft: '25%',
-          marginRight: '25%',
-          marginTop: '2%',
-          marginBottom: '2%',
-          height: '550px',
-          backgroundColor: '#fcc2a1',
-          textAlign: 'center'
-        }} >
+      if(q.questionType != 'Text'){
+        chartData = _.filter(chartData, function(data){ return chartData });
+        charts.push(
+          <div key={q.id+'-chart'} style={{
+            padding: '10px',
+            width: '50%',
+            marginLeft: '25%',
+            marginRight: '25%',
+            marginTop: '2%',
+            marginBottom: '2%',
+            height: '430px',
+            backgroundColor: '#fcc2a1',
+            textAlign: 'center'
+          }} >
           <Chart key={q.id} question={q} chartData={chartData}/>
-        </div>
-      )
+          </div>
+        )
+      }
     });
 
     if(isLoading)
@@ -194,7 +197,7 @@ class ViewResult extends Component{
            </Row>
             <Tabs className='z-depth-1' onChange={(e) =>{this.setState({active: e+''})}}>
               <Tab title="Actual Responses" active={active.endsWith('0')}>
-                <ResultTable key={'resultTable'} questions={sortedQuestions} responses={filteredRes}/>
+                <ResultTable key={'resultTable'} questions={sortedQuestions} responses={filteredRes} surveyTitle={survey.surveyName}/>
               </Tab>
               <Tab title="Charts & Graphs" active={active.endsWith('1')}>
                 {charts}
