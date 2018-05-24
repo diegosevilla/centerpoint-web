@@ -88,6 +88,7 @@ class DataAnalysis extends React.Component {
       if(temp){
         temp.forEach((t) => {
           if(question.questionType == 'Likert-Scale')
+            stat += t + ' , ';
             res.push(question.options.indexOf(t)+1);
           else
             res.push(t);
