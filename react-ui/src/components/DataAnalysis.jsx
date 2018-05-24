@@ -57,7 +57,6 @@ class DataAnalysis extends React.Component {
         total += r.count;
       });
       if(total > 0)
-        alert(score);
         score = parseFloat(score / total).toFixed(4);
     } else if(question.questionType == 'Text'){
       let sentiment = new Sentiment();
@@ -89,7 +88,6 @@ class DataAnalysis extends React.Component {
       if(temp){
         temp.forEach((t) => {
           if(question.questionType == 'Likert-Scale'){
-            stat += t + '( ' +  (question.options.indexOf(t)) +  '), ';
             res.push(question.options.indexOf(t)+1);
           } else {
             res.push(t);
