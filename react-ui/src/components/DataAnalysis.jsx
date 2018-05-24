@@ -52,7 +52,8 @@ class DataAnalysis extends React.Component {
     if(question.questionType == 'Likert-Scale'){
       let total = 0;
       responses.forEach((r) => {
-        score += (r.count*(question.options.indexOf(r.response)+1));
+        let scaleScore = question.options.indexOf(r.response)+1;
+        score += (r.count*scaleScore);
         total += r.count;
       });
       if(total > 0)
@@ -82,12 +83,10 @@ class DataAnalysis extends React.Component {
   getStatistics(responses, question){
     let stat = '';
     let res = [];
-    console.log(question.label);
     responses.forEach((r) => {
       let temp = r[question.id];
       if(temp){
         temp.forEach((t) => {
-          console.log(t);
           if(question.questionType == 'Likert-Scale')
             res.push(question.options.indexOf(t)+1);
           else
