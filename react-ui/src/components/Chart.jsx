@@ -31,7 +31,8 @@ class Chart extends React.Component {
     const {question, chartData} = this.props;
     const {data} = this.state;
     let chart;
-    let fileName = question.label.toLowerCase().split(' ').join('-');
+    let label = question.questionType == 'Demographic'? question.defaultValue : question.label;
+    let fileName = label.toLowerCase().split(' ').join('-');
     switch (question.questionType) {
       case 'Checkbox':
         chart = new CanvasJS.Chart('chartContainer-'+question.id, {
@@ -39,7 +40,7 @@ class Chart extends React.Component {
           exportEnabled: true,
           exportFileName: fileName,
           title: {
-            text: question.label
+            text: label
           },
           data: [{
             type: 'column',
@@ -54,7 +55,7 @@ class Chart extends React.Component {
           exportEnabled: true,
           exportFileName: fileName,
           title:{
-            text: question.label
+            text: label
           },
           data: [{
             type: 'line',
@@ -71,7 +72,7 @@ class Chart extends React.Component {
           exportEnabled: true,
           exportFileName: fileName,
           title:{
-            text: question.label
+            text: label
           },
           data: [{
             type: 'pie',

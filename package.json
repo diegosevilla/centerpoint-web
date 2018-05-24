@@ -46,6 +46,7 @@
     "sequelize": "^4.32.2",
     "sequelize-tokenify": "^0.1.6",
     "tableexport": "^5.0.0",
+    "ttest": "^1.1.0",
     "victory": "^0.26.0",
     "yargs": "^11.0.0"
   },

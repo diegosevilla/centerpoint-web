@@ -4,6 +4,7 @@ import {Table} from 'react-materialize';
 import _ from 'lodash';
 import * as Sentiment from 'sentiment';
 import Math from 'mathjs';
+import ttest from 'ttest';
 
 import styles from '../stylesheets/CreateSurvey.css';
 
@@ -56,7 +57,7 @@ class DataAnalysis extends React.Component {
         total += r.count;
       });
       if(total > 0)
-        score = parseFloat(score / (total*5)).toFixed(4);
+        score = parseFloat(score / total).toFixed(4);
     } else if(question.questionType == 'Text'){
       let sentiment = new Sentiment();
       responses.forEach((res) => {
@@ -69,34 +70,41 @@ class DataAnalysis extends React.Component {
     return score;
   }
 
-  getAnalysis(score, totalScore){
-    let percent = score/totalScore*100;
-    if(_.inRange(percent, 0, 50))
+  getAnalysis(score, options){
+
+    if(_.inRange(score, 0, options.length*.50))
       return ' received a negative score.'
-    if(_.inRange(percent, 50, 60))
+    if(_.inRange(score, options.length*.50, options.length*.60))
       return ' received a neutral score.'
-    if(_.inRange(percent, 60, 100))
+    if(_.inRange(score, options.length*.60, options.length))
       return ' received a positive score.'
   }
 
   getStatistics(responses, question){
     let stat = '';
     let res = [];
+
     responses.forEach((r) => {
       let temp = r[question.id];
       if(temp){
         temp.forEach((t) => {
-          res.push(question.options.indexOf(t)+1);
+          if(question.questionType == 'Likert-Scale')
+            res.push(question.options.indexOf(t)+1);
+          else
+            res.push(t);
         })
       }
     })
 
-    let mode = Math.mode(res).map((m) => {return question.options[m-1]});
+    let mode = Math.mode(res).map((m) => { return question.questionType == 'Likert-Scale'? question.options[m-1] : m});
     let op = (mode.length > 1)? ' options ' : 'option';
 
-    stat += 'The question scored an average of ' + Math.mean(res).toFixed(4) + '.';
+    stat += ' scored an average of ' + Math.mean(res).toFixed(4) + '.';
     stat += ' While the median of the responses is ' + Math.median(res) +'.';
     stat += ' The ' + op + ' ' + mode.join(', ') + ((mode.length > 1)? ' were ' : ' was ') + 'the most selected ' + op + '.';
+
+    stat += ' On average, the responses deviates from the mean by about ' + Math.std(res).toFixed(4);
+    console.log(ttest({mean: Math.mean(res), variance: Math.var(res), size: res.length}));
     return stat;
   }
 
@@ -132,16 +140,17 @@ class DataAnalysis extends React.Component {
 
       switch(question.questionType){
         case 'Options':
-          summary += 'Majority (' +  percent + ') of the respondents asked answered ' + max.response + ' to the question \'' + question.label + '\'. ';
+          summary += 'Majority ( ' +  max.count + ' ) of the ' + total + ' respondents asked answered ' + max.response + ' to the question \'' + question.label + '\'. Which means that among all the respondents, ' + percent + '% chose ' + max.response;
           break;
         case 'Likert-Scale':
-          summary += ' On a ' + question.options.length + ' point Likert Scale, ' + this.getStatistics(responses, question);
+          summary += ' On a ' + question.options.length + ' point Likert Scale, the question ' + question.label + ' ' + this.getStatistics(responses, question);
+          summary += '. Given that the question received a score of ' + d.score + ', it can be observed that the question ' + this.getAnalysis(d.score, question.options);
           break;
         case 'Checkbox':
           summary += 'Out of ' + responses.length  + ' respondents, ' + max.count + ' selected ' + max.response + ' as answer to the question \'' + question.label +'\'.'
           break;
         case 'Number':
-          summary += this.getStatistics(responses, question);
+          summary += 'The question, ' + question.label + ' , ' + this.getStatistics(responses, question);
           break;
         case 'Text':
           let sentiment = '';

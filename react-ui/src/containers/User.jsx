@@ -59,7 +59,7 @@ class User extends Component{
     //if(survey.responseCount === 0)
       window.location = '/design-survey/'+survey.id;
     //else
-      //alert('Cannot edit survey!');
+      //alert('Survey already has responses. Can no longer edit this survey');
   }
 
   logoutFxn = () =>  {
