@@ -55,9 +55,6 @@ class ResultTable extends React.Component {
       });
     })
 
-    console.log(data);
-    console.log(columns);
-
     return(
       <div style={{backgroundColor: 'white', height: 500, padding: 10}}>
         <ReactHTMLTableToExcel className="download-table-xls-button" table="table-to-xls" filename={surveyTitle+' Results'} sheet="tablexls" buttonText="Download Result Table"/>
@@ -66,7 +63,7 @@ class ResultTable extends React.Component {
             {header}
           </tr>
           {body}
-          </table>
+        </table>
         <ReactTable data={data} columns={columns} defaultPageSize={10} className="-striped -highlight" sortable={false}/>
       </div>
     )

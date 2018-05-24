@@ -61,7 +61,6 @@ class DataAnalysis extends React.Component {
       let sentiment = new Sentiment();
       responses.forEach((res) => {
         var result = sentiment.analyze(res.response);
-        console.log(result);
         score += result.score;
       })
       score = 0
@@ -69,12 +68,14 @@ class DataAnalysis extends React.Component {
     return score;
   }
 
-  getAnalysis(score, total){
-    if(_.inRange(score, 0, total*.50))
+  getAnalysis(score, options){
+    score = Math.floor(score);
+    let half = Math.ceil(options.length/2);
+    if(_.inRange(score, 0, half))
       return ' received a negative score.'
-    if(_.inRange(score, total*.50, total*.60))
+    if(score == half)
       return ' received a neutral score.'
-    if(_.inRange(score, total*.60, total))
+    if(_.inRange(score, half + 1, options.length))
       return ' received a positive score.'
   }
 
@@ -84,6 +85,7 @@ class DataAnalysis extends React.Component {
 
     responses.forEach((r) => {
       let temp = r[question.id];
+      console.log(temp);
       if(temp){
         temp.forEach((t) => {
           if(question.questionType == 'Likert-Scale')
@@ -128,6 +130,7 @@ class DataAnalysis extends React.Component {
     for(let i = 0 ; i < data.length ; i++){
       let d = data[i];
       if(!d) continue;
+      console.log(d)
       let summary = '';
       let question = d.question;
       let total = d.total;
@@ -137,11 +140,11 @@ class DataAnalysis extends React.Component {
 
       switch(question.questionType){
         case 'Options':
-          summary += 'Majority ( ' +  max.count + ' ) of the ' + total + ' respondents asked answered ' + max.response + ' to the question \'' + question.label + '\'. Which means that among all the respondents, ' + percent + '% chose ' + max.response;
+          summary += 'Majority ( ' +  max.count + ' out of  ' + total + ' ) of the respondents asked, answered ' + max.response + ' to the question \'' + question.label + '\'. Which means that among all the respondents, ' + percent + '% chose ' + max.response;
           break;
         case 'Likert-Scale':
           summary += ' On a ' + question.options.length + ' point Likert Scale, the question ' + question.label + ' ' + this.getStatistics(responses, question);
-          summary += '. Given that the question received a score of ' + d.score + ', it can be observed that the question ' + this.getAnalysis(d.score, total);
+          summary += '. Given that the question received a score of ' + d.score + ', it can be observed that the question ' + this.getAnalysis(d.score, question.options);
           break;
         case 'Checkbox':
           summary += 'Out of ' + responses.length  + ' respondents, ' + max.count + ' selected ' + max.response + ' as answer to the question \'' + question.label +'\'.'
