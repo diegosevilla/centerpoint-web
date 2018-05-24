@@ -142,7 +142,7 @@ class DataAnalysis extends React.Component {
           summary += 'Majority ( ' +  max.count + ' out of  ' + total + ' ) of the respondents asked, answered ' + max.response + ' to the question \'' + question.label + '\'. Which means that among all the respondents, ' + percent + '% chose ' + max.response;
           break;
         case 'Likert-Scale':
-          summary += ' On a ' + question.options.length + ' point Likert Scale, the question ' + question.label + ' ' + this.getStatistics(responses, question);
+          summary += ' On a ' + question.options.length + ' point Likert Scale, the question ' + question.label + ' ' + this.getStatistics(d.responses, question);
           summary += '. Given that the question received a score of ' + d.score + ', it can be observed that the question ' + this.getAnalysis(d.score, question.options);
           break;
         case 'Checkbox':
