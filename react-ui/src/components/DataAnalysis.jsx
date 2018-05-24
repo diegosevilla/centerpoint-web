@@ -69,13 +69,12 @@ class DataAnalysis extends React.Component {
     return score;
   }
 
-  getAnalysis(score, options){
-
-    if(_.inRange(score, 0, options.length*.50))
+  getAnalysis(score, total){
+    if(_.inRange(score, 0, total*.50))
       return ' received a negative score.'
-    if(_.inRange(score, options.length*.50, options.length*.60))
+    if(_.inRange(score, total*.50, total*.60))
       return ' received a neutral score.'
-    if(_.inRange(score, options.length*.60, options.length))
+    if(_.inRange(score, total*.60, total))
       return ' received a positive score.'
   }
 
@@ -142,7 +141,7 @@ class DataAnalysis extends React.Component {
           break;
         case 'Likert-Scale':
           summary += ' On a ' + question.options.length + ' point Likert Scale, the question ' + question.label + ' ' + this.getStatistics(responses, question);
-          summary += '. Given that the question received a score of ' + d.score + ', it can be observed that the question ' + this.getAnalysis(d.score, question.options);
+          summary += '. Given that the question received a score of ' + d.score + ', it can be observed that the question ' + this.getAnalysis(d.score, total);
           break;
         case 'Checkbox':
           summary += 'Out of ' + responses.length  + ' respondents, ' + max.count + ' selected ' + max.response + ' as answer to the question \'' + question.label +'\'.'
