@@ -4,7 +4,6 @@ import {Table} from 'react-materialize';
 import _ from 'lodash';
 import * as Sentiment from 'sentiment';
 import Math from 'mathjs';
-import ttest from 'ttest';
 
 import styles from '../stylesheets/CreateSurvey.css';
 
