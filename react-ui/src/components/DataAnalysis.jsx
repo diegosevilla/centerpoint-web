@@ -103,7 +103,6 @@ class DataAnalysis extends React.Component {
     stat += ' The ' + op + ' ' + mode.join(', ') + ((mode.length > 1)? ' were ' : ' was ') + 'the most selected ' + op + '.';
 
     stat += ' On average, the responses deviates from the mean by about ' + Math.std(res).toFixed(4);
-    console.log(ttest({mean: Math.mean(res), variance: Math.var(res), size: res.length}));
     return stat;
   }
 
