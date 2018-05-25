@@ -57,7 +57,7 @@ class DataAnalysis extends React.Component {
         total += r.count;
       });
       if(total > 0)
-        score = parseFloat(score / total).toFixed(4);
+        score = parseFloat(score / total).toFixed(2);
     } else if(question.questionType == 'Text'){
       let sentiment = new Sentiment();
       responses.forEach((res) => {
@@ -99,7 +99,7 @@ class DataAnalysis extends React.Component {
     let mode = Math.mode(res).map((m) => { return question.questionType == 'Likert-Scale'? question.options[m-1] : m});
     let op = (mode.length > 1)? ' options ' : 'option';
 
-    stat += ' scored an average of ' + Math.mean(res).toFixed(4) + '.';
+    stat += ' scored an average of ' + Math.mean(res).toFixed(2) + '.';
     let median = Math.median(res).toFixed(2);
     stat += ' While the median of the responses is ' + median +'.';
     let half = question.options? Math.ceil(question.options.length/2) : Math.ceil(question.maxVal/2);
@@ -111,7 +111,7 @@ class DataAnalysis extends React.Component {
       stat +=  ' Since the median is greater than the mid value, it can be concluded that the results gathered were mostly positive.';
 
     stat += ' The ' + op + ' ' + mode.join(', ') + ((mode.length > 1)? ' were ' : ' was ') + 'the most selected ' + op + '.';
-    stat += ' On average, the responses deviates from the mean by about ' + Math.std(res).toFixed(4);
+    stat += ' On average, the responses deviates from the mean by about ' + Math.std(res).toFixed(2);
     return stat;
   }
 
@@ -151,7 +151,7 @@ class DataAnalysis extends React.Component {
           summary += 'Majority ( ' +  max.count + ' out of  ' + total + ' ) of the respondents asked, answered ' + max.response + ' to the question \'' + question.label + '\'. Which means that among all the respondents, ' + percent + '% chose ' + max.response;
           break;
         case 'Likert-Scale':
-          summary += ' On a ' + question.options.length + ' point Likert Scale, the question ' + question.label + ' ' + this.getStatistics(responses, question);
+          summary += '\tOn a ' + question.options.length + ' point Likert Scale, the question ' + question.label + ' ' + this.getStatistics(responses, question);
           summary += '. Given that the question received a score of ' + d.score + ', it can be observed that the question ' + this.getAnalysis(d.score, question.options);
           break;
         case 'Checkbox':

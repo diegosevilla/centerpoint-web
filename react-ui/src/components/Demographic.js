@@ -30,7 +30,7 @@ export class AgeForm extends React.Component {
     const id = question? '-'+question.id : '';
     let i;
 
-    $('#label'+id).val('What is your age?');
+    $('#label'+id).val('How old are you?');
     $('#label'+id).change();
 
     let value='Below ' + min + '\n';
@@ -44,15 +44,20 @@ export class AgeForm extends React.Component {
     }
     value += 'Above ' + (parseInt(i)-1);
 
-    if(!min || !max || !interval || min > max)
+    if(!min || !max || !interval || min > max){
+      console.log('min:' + min );
+      console.log('max:' + max );
+      console.log('interval:' + interval);
+      console.log(min + '>' + max);
       value='Error setting options';
+    }
 
     return (
       <Row>
         <Row>
-          <Input id={'minAge'+id} type='number' onChange={ (e) => { this.setState({min: $('#minAge'+id).val()}) } } label='Minimum Age' value={min} min={0}/>
-          <Input id={'maxAge'+id} type='number' onChange={ (e) => { this.setState({max: $('#maxAge'+id).val()}) } } label='Maximum Age' value={max} min={parseInt(min)+parseInt(interval)}/>
-          <Input id={'interval'+id} type='number' onChange={ (e) => { this.setState({interval: $('#interval'+id).val()}) } } label='Interval' value={interval} min={1}/>
+          <Input id={'minAge'+id} type='number' onChange={ (e) => { this.setState({min: parseInt($('#minAge'+id).val())}) } } label='Minimum Age' value={min} min={0}/>
+          <Input id={'maxAge'+id} type='number' onChange={ (e) => { this.setState({max: parseInt($('#maxAge'+id).val())}) } } label='Maximum Age' value={max} min={parseInt(min)+parseInt(interval)}/>
+          <Input id={'interval'+id} type='number' onChange={ (e) => { this.setState({interval: parseInt($('#interval'+id).val())}) } } label='Interval' value={interval} min={1}/>
         </Row>
         <Row>
           <h5> Options </h5>

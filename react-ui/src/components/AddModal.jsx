@@ -29,7 +29,6 @@ class AddModal extends Component{
   }
 
   componentDidUpdate(){
-    $('#label').val('');
     $('#label').change();
     if(this.state.type == 'Demographic'){
       $('#required').prop('checked', true);
