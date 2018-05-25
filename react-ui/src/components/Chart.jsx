@@ -57,8 +57,6 @@ class Chart extends React.Component {
           },
           data: [{
             type: 'line',
-            startAngle: 45,
-            yValueFormatString: '#,##0.0#\'%\'',
             dataPoints: data
           }]
         });
@@ -82,7 +80,6 @@ class Chart extends React.Component {
     }
     if(chart && question.questionType != 'Text')
   	 chart.render();
-
   };
 
   render(){

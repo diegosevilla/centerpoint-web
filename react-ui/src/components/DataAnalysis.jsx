@@ -100,9 +100,17 @@ class DataAnalysis extends React.Component {
     let op = (mode.length > 1)? ' options ' : 'option';
 
     stat += ' scored an average of ' + Math.mean(res).toFixed(4) + '.';
-    stat += ' While the median of the responses is ' + Math.median(res) +'.';
-    stat += ' The ' + op + ' ' + mode.join(', ') + ((mode.length > 1)? ' were ' : ' was ') + 'the most selected ' + op + '.';
+    let median = Math.median(res).toFixed(2);
+    stat += ' While the median of the responses is ' + median +'.';
+    let half = question.options? Math.ceil(question.options.length/2) : Math.ceil(question.maxVal/2);
+    if(median < half)
+      stat += ' Since the median is below the mid value, it can be concluded that the results gathered were mostly negative.'
+    else if(median == half)
+      stat +=  ' Since the median is equal to the mid value, it can be concluded that the results gathered were mostly neutral or in the middle.'
+    else
+      stat +=  ' Since the median is greater than the mid value, it can be concluded that the results gathered were mostly positive.';
 
+    stat += ' The ' + op + ' ' + mode.join(', ') + ((mode.length > 1)? ' were ' : ' was ') + 'the most selected ' + op + '.';
     stat += ' On average, the responses deviates from the mean by about ' + Math.std(res).toFixed(4);
     return stat;
   }

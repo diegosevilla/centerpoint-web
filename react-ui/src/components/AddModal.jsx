@@ -25,7 +25,7 @@ class AddModal extends Component{
   }
 
   componentDidMount(){
-    this.setState({type:'Text'});
+    this.setState({type:'Demographic'});
   }
 
   componentDidUpdate(){
@@ -127,13 +127,13 @@ class AddModal extends Component{
         <form id='addForm' onSubmit={(e) => this.add(e)}>
           <Row>
               <Input required='true' s={12} id='label' name='label' label='Label' defaultValue=''/>
-              <Input required='true' s={12} id='type' onChange={ (e) => { e.preventDefault(); this.setState({type: $('#type').val()})}} type='select' label='Question Type' defaultValue='Text'>
+              <Input required='true' s={12} id='type' onChange={ (e) => { e.preventDefault(); this.setState({type: $('#type').val()})}} type='select' label='Question Type' defaultValue='Demographic'>
+                <option value='Demographic'>Demographic</option>
                 <option value='Text'>Text</option>
                 <option value='Number'>Number</option>
                 <option value='Options'>Options</option>
                 <option value='Checkbox'>Checkbox</option>
                 <option value='Likert-Scale'>Likert Scale</option>
-                <option value='Demographic'>Demographic</option>
               </Input>
               <Input id='required' type='checkbox' label='Is this question required?'/>
           </Row>
