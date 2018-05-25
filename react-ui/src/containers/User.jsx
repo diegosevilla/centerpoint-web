@@ -56,10 +56,10 @@ class User extends Component{
   }
 
   edit(survey){
-    //if(survey.responseCount === 0)
+    if(survey.responseCount === 0)
       window.location = '/design-survey/'+survey.id;
-    //else
-      //alert('Survey already has responses. Can no longer edit this survey');
+    else
+      alert('Survey already has responses. Can no longer edit this survey');
   }
 
   logoutFxn = () =>  {
