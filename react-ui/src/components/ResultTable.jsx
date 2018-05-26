@@ -11,10 +11,9 @@ import styles from '../stylesheets/CreateSurvey.css';
 
 class ResultTable extends React.Component {
   render(){
-    const { questions, responses, surveyTitle} = this.props;
+    const { questions, responses, surveyTitle, surveyId} = this.props;
     const header = [];
     const body = [];
-    const surveyId = questions[0].survey_id;
 
     header.push(<th key='responseNum'> Response Number </th>);
     questions.forEach((q) => {
@@ -72,7 +71,8 @@ class ResultTable extends React.Component {
 
 ResultTable.propTypes = {
     questions: PropTypes.array.isRequired,
-    responses: PropTypes.array.isRequired
+    responses: PropTypes.array.isRequired,
+    surveyId: PropTypes.number.isRequired
 };
 
 export default ResultTable;

@@ -197,7 +197,7 @@ class ViewResult extends Component{
            </Row>
             <Tabs className='z-depth-1' onChange={(e) =>{this.setState({active: e+''})}}>
               <Tab title="Actual Responses" active={active.endsWith('0')}>
-                <ResultTable key={'resultTable'} questions={sortedQuestions} responses={filteredRes} surveyTitle={survey.surveyName}/>
+                <ResultTable key={'resultTable'} surveyId={survey.id} questions={sortedQuestions} responses={filteredRes} surveyTitle={survey.surveyName}/>
               </Tab>
               <Tab title="Charts & Graphs" active={active.endsWith('1')}>
                 {charts}
