@@ -11,7 +11,7 @@ import CheckBox from '../components/CheckBox';
 
 import EditModal  from '../components/EditModal';
 import AddModal from '../components/AddModal'
-import { fetchSurvey, getSurvey, createQuestion, deleteQuestion, updateSurvey } from './../actions/index';
+import { fetchSurvey, getSurvey, createQuestion, deleteQuestion, updateSurvey, check } from './../actions/index';
 
 import styles from './../stylesheets/CreateSurvey.css';
 
@@ -21,7 +21,8 @@ class CreateSurvey extends Component{
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      user: {}
     };
   }
 
@@ -33,9 +34,16 @@ class CreateSurvey extends Component{
         alert("Error creating survey!");
         window.location = '/';
       } else {
-        this.setState({isLoading: false})
+        this.props.check().then((user)=>{
+          if(user.code === 200){
+              this.setState({isLoading: false, user:user})
+          }
+          else {
+            window.location = '/';
+          }
+        });
       }
-    })
+    });
   }
 
   remove(e, input){
@@ -68,7 +76,7 @@ class CreateSurvey extends Component{
       id: this.props.survey.id,
       surveyName: $('#surveyName').val(),
       details: $('#details').val(),
-      author: $('#author').val()
+      author: this.state.user.email,
     };
     this.props.updateSurvey(survey);
     $('#editSurvey').modal('close');
@@ -155,9 +163,10 @@ CreateSurvey.propTypes = {
     getSurvey: PropTypes.object.isRequired,
     fetchSurvey: PropTypes.func.isRequired,
     deleteQuestion: PropTypes.func.isRequired,
-    updateSurvey: PropTypes.func.isRequired
+    updateSurvey: PropTypes.func.isRequired,
+    check: PropTypes.func.isRequired
 };
 export default connect(
     state => ({ survey: state.survey }),
-    {getSurvey, fetchSurvey, createQuestion, deleteQuestion, updateSurvey }
+    {getSurvey, fetchSurvey, createQuestion, deleteQuestion, updateSurvey, check }
 )(CreateSurvey);
