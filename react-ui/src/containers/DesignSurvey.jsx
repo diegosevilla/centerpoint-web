@@ -34,9 +34,9 @@ class CreateSurvey extends Component{
         alert("Error creating survey!");
         window.location = '/';
       } else {
-        this.props.check().then((user)=>{
-          if(user.code === 200){
-              this.setState({isLoading: false, user:user})
+        this.props.check().then((res)=>{
+          if(res.code === 200){
+              this.setState({isLoading: false, user:res.user})
           }
           else {
             window.location = '/';
@@ -72,12 +72,14 @@ class CreateSurvey extends Component{
 
   editSurvey(e){
     e.preventDefault();
+    alert(JSON.stringify(this.state.user));
     let survey = {
       id: this.props.survey.id,
       surveyName: $('#surveyName').val(),
       details: $('#details').val(),
       author: this.state.user.email,
     };
+    alert(JSON.stringify(survey));
     this.props.updateSurvey(survey);
     $('#editSurvey').modal('close');
   }
