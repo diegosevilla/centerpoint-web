@@ -118,11 +118,11 @@ class User extends Component{
 
     return(
       <div>
-        <Navbar style={{backgroundColor: '#b27b05'}} brand='CenterPoint' right>
+        <Navbar style={{backgroundColor: '#b27b05', marginBottom: 10}} brand='CenterPoint' right>
           <NavItem onClick={this.logoutFxn}>  Logout </NavItem>
         </Navbar>
         <div>
-          <Row style={{backgroundColor: 'white', paddingTop: 50, width:'80%'}}>
+          <Row style={{width:'90%'}}>
             <Modal header='Create New Survey' trigger={<Button className='createSurvey btn-large waves-effect waves-light amber darken-3'>Create New Survey</Button>}>
               <form onSubmit={(e) => this.createSurveyEvent(e) }>
                 <Input id='surveyName' required='true' label='Survey Title'/>
