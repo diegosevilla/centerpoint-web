@@ -58,14 +58,7 @@ class DataAnalysis extends React.Component {
       });
       if(total > 0)
         score = parseFloat(score / total).toFixed(2);
-    } else if(question.questionType == 'Text'){
-      let sentiment = new Sentiment();
-      responses.forEach((res) => {
-        var result = sentiment.analyze(res.response);
-        score += result.score;
-      })
-      score = 0
-    }
+    } 
     return score;
   }
 
@@ -160,15 +153,6 @@ class DataAnalysis extends React.Component {
         case 'Number':
           summary += 'The question, ' + question.label + ' , ' + this.getStatistics(responses, question);
           break;
-        case 'Text':
-          let sentiment = '';
-          if(d.score < 0)
-            sentiment += ' negative ';
-          else if(d.score ==0)
-            sentiment += ' neutral ';
-          else
-            sentiment += ' positive '
-          summary += 'The question \'' + question.label + '\' received mostly' + sentiment + ' results';
         default: break;
       }
       analysis.push(<p key={question.id+'-summary'}> {summary} </p>)
