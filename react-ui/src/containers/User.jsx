@@ -4,6 +4,8 @@ import {Button, Modal, Input  , Row, Preloader, Table, Navbar, NavItem} from 're
 import { connect } from 'react-redux';
 import { createSurvey } from './../actions/index';
 import styles from './../stylesheets/Home.css';
+import ReactTable from 'react-table';
+import "react-table/react-table.css";
 import _ from 'lodash';
 
 import { login, check, logOut } from './../actions/index';
@@ -97,26 +99,22 @@ class User extends Component{
     const {surveys, surveyName} = this.state;
 
     const filteredSurveys = _.filter(surveys, function(s) { return ( s.surveyName.includes(surveyName)) });
-    let temp = [];
-    if(filteredSurveys.length === 0){
-      if(surveys.length === 0)
-        temp.push(<h5> No Surveys Yet </h5>);
-      else
-        temp.push(<h5> {'No survey matched the filter ' + surveyName} </h5>);
-    }else
-      filteredSurveys.forEach((survey) => {
-        temp.push(
-          <tr>
-            <td> {survey.surveyName} </td>
-            <td> {survey.details} </td>
-            <td>
-              <Button small style={{margin: 5}} className='blue' onClick={() => window.location = '/view-result/'+survey.id} waves='light'> View Result </Button>
-              <Button small style={{margin: 5}} className='green' onClick={() => this.edit(survey)} waves='light'> Edit Survey </Button>
-              <Button small style={{margin: 5}} className='red' onClick={() => this.remove(survey)} waves='light'> Delete Survey </Button>
-            </td>
-          </tr>
-        )
-      });
+    let data = filteredSurveys.map((survey) => {
+      let temp = {};
+      temp.label = survey.surveyName;
+      temp.surveyId = survey.surveyId;
+      temp.actions = [];
+      temp.actions.push(<Button small style={{margin: 5}} className='blue' onClick={() => window.location = '/view-result/'+survey.id} waves='light'> View Result </Button>);
+      temp.actions.push(<Button small style={{margin: 5}} className='green' onClick={() => this.edit(survey)} waves='light'> Edit Survey </Button>);
+      temp.actions.push(<Button small style={{margin: 5}} className='red' onClick={() => this.remove(survey)} waves='light'> Delete Survey </Button>);
+      return temp;
+    });
+
+    let columns = [
+      {Header: 'Survey Title', accessor: 'label', width: 500},
+      {Header: 'Survey Id', accessor: 'surveyId', width: 200},
+      {Header: 'Options', accessor: 'actions', width: 600}
+    ]
 
     return(
       <div>
@@ -132,24 +130,10 @@ class User extends Component{
                 <Input className='btn blue-grey darken-1' type='submit'/>
               </form>
             </Modal>
-            <Table>
-              <thead>
-                <tr>
-                  <th data-field="title">
-                    <Input onChange={(e)=>{this.setState({surveyName: $('#filterName').val()})}} id='filterName'  label='Survey Title'/>
-                  </th>
-                  <th data-field="id">
-                    Details
-                  </th>
-                  <th data-field="id">
-                    Options
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {temp}
-              </tbody>
-            </Table>
+            <Row>
+              <Input onChange={(e)=>{this.setState({surveyName: $('#filterName').val()})}} id='filterName'  label='Filter By Survey Title'/>
+            </Row>
+            <ReactTable data={data} columns={columns} defaultPageSize={10} className="-striped -highlight" sortable={false}/>
           </Row>
         </div>
       </div>
