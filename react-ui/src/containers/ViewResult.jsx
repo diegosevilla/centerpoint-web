@@ -21,7 +21,6 @@ class ViewResult extends Component{
       responses: [],
       questions: [],
       active: '0',
-      locations: [[''], [''], ['']],
       filter: {},
       demography: {}
     };
@@ -40,13 +39,7 @@ class ViewResult extends Component{
         .then((responses) => {
           let temp = [];
           let tempAnswers = responses.answers;
-          let tempLoc = [[''], [''], ['']];
           tempAnswers.forEach((answer) => {
-            let loc = answer.location.split(',');
-            for(let i = 0 ; i < 3 ; i++){
-              if(!_.includes(tempLoc[i], loc[i]))
-                tempLoc[i].push(loc[i]);
-            }
             let r = _.find(temp, {responseCount: answer.responseCount, question_id: answer.question_id});
             if(!r){
               answer.response = [answer.response];
@@ -62,7 +55,7 @@ class ViewResult extends Component{
           demo.forEach((d) => { demography[d.id] = '' });
 
           let data = _.groupBy(temp, function(a){return a.responseCount});
-          this.setState({isLoading: false, data, responses: tempAnswers, questions: responses.questions, locations: tempLoc, demography: demography });
+          this.setState({isLoading: false, data, responses: tempAnswers, questions: responses.questions, demography: demography });
         })
       }
     })

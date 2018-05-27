@@ -33,19 +33,20 @@ class ResultTable extends React.Component {
       body.push(<tr key={response.responseCount+'-row'}>{temp}</tr>);
     })
 
+    console.log(responses);
     const data = responses.map((response) => {
       let temp = {};
       for(let key in response){
         if(/^\d+$/.test(key)){
           temp[key+''] = response[key].join(', ');
-        } else if(key == 'responseCount'){
+        } else {
           temp[key] = response[key];
         }
       }
       return temp;
     });
 
-    let columns = [{Header: 'Response Number', accessor: 'responseCount', width: 500}, {Header: 'Location', accessor: 'location', width: 500} ]
+    let columns = [{Header: ' ', accessor: 'responseCount', width: 100}, {Header: 'Location', accessor: 'location', width: 300} ]
     questions.forEach((question) => {
       let header = question.questionType == 'Demographic'? question.defaultValue : question.label;
       columns.push({
