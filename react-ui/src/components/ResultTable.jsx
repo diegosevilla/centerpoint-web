@@ -45,12 +45,13 @@ class ResultTable extends React.Component {
       return temp;
     });
 
-    let columns = [{Header: 'Response Number', accessor: 'responseCount'}]
+    let columns = [{Header: 'Response Number', accessor: 'responseCount', width: 500}, {Header: 'Location', accessor: 'location', width: 500} ]
     questions.forEach((question) => {
       let header = question.questionType == 'Demographic'? question.defaultValue : question.label;
       columns.push({
         Header: header,
-        accessor: question.id+''
+        accessor: question.id+'',
+        width: 500
       });
     })
 

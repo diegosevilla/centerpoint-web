@@ -107,13 +107,15 @@ class ViewResult extends Component{
     let res = [];
     for(let key in data){
       let temp = data[key];
-      let r = {};
-      r.responseCount = key;
-      r.location = temp[0].location;
-      temp.forEach((t) => {
-        r[t.question_id] = t.response;
-      })
-      res.push(r);
+      if(temp){
+        let r = {};
+        r.responseCount = key;
+        r.location = temp[0].location;
+        temp.forEach((t) => {
+          r[t.question_id] = t.response;
+        })
+        res.push(r);
+      }
     }
 
     let filteredRes = _.filter(res, (r) => {
