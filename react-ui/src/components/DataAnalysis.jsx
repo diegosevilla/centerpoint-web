@@ -58,7 +58,7 @@ class DataAnalysis extends React.Component {
       });
       if(total > 0)
         score = parseFloat(score / total).toFixed(2);
-    } 
+    }
     return score;
   }
 
@@ -69,7 +69,7 @@ class DataAnalysis extends React.Component {
       return ' received a negative score.'
     if(score == half)
       return ' received a neutral score.'
-    if(_.inRange(score, half + 1, options.length))
+    if(_.inRange(score, half + 1, options.length+1))
       return ' received a positive score.'
   }
 
