@@ -130,6 +130,11 @@ class User extends Component{
                 <Input className='btn blue-grey darken-1' type='submit'/>
               </form>
             </Modal>
+            <a id='download' href="/CenterPointMobile.apk" download>
+             <Button>
+              Download Mobile App
+             </Button>
+            </a>
             <Row>
               <Input onChange={(e)=>{this.setState({surveyName: $('#filterName').val()})}} id='filterName'  label='Filter By Survey Title'/>
             </Row>

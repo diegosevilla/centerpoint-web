@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {PropTypes}  from 'prop-types';
-import { Icon, Row } from 'react-materialize';
+import { Icon, Row, Button } from 'react-materialize';
 import { connect } from 'react-redux';
 import { createSurvey } from './../actions/index';
 import styles from './../stylesheets/Home.css';
@@ -9,6 +9,7 @@ import GoogleLogin from 'react-google-login';
 import { login, check, logOut } from './../actions/index';
 
 const Materialize = window.Materialize;
+const $ = window.$;
 
 class Home extends Component{
   componentWillMount(){
@@ -53,6 +54,13 @@ class Home extends Component{
                      onSuccess={this.logInFxn}
                      onFailure={this.errorFxn}
                     />
+                  </Row>
+                  <Row>
+                    <a id='download' href="/CenterPointMobile.apk" download>
+                     <Button>
+                      Download Mobile App
+                     </Button>
+                    </a>
                   </Row>
                 </div>
               </div>

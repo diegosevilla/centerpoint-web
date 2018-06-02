@@ -32,8 +32,7 @@ class ResultTable extends React.Component {
       });
       body.push(<tr key={response.responseCount+'-row'}>{temp}</tr>);
     })
-
-    console.log(responses);
+    
     const data = responses.map((response) => {
       let temp = {};
       for(let key in response){

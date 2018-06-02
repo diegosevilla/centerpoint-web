@@ -7,5 +7,4 @@ api
   .use('/survey', survey)
   .use('/question', question)
   .use('/answer', answer);
-
 api.use((req, res) => res.status(404).end())
